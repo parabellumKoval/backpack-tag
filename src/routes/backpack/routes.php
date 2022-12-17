@@ -1,12 +1,10 @@
 <?php
 
 Route::group([
-    'namespace'  => '',
-    'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
-    'prefix'     => config('backpack.base.route_prefix', 'admin'),
+  'prefix'     => config('backpack.base.route_prefix', 'admin'),
+  'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
+  'namespace'  => 'Backpack\Reviews\app\Http\Controllers\Admin',
 ], function () { 
-    $controller = config('backpack.pagemanager.admin_controller_class2', 'Aimix\Review\app\Http\Controllers\Admin\ReviewCrudController');
-    //dd($controller);
-    Route::crud('review', $controller);
+    Route::crud('review', 'ReviewCrudController');
 }); 
 

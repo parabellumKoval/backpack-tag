@@ -1,31 +1,54 @@
-# Review
+# Backpack-store
 
-[![Build Status](https://travis-ci.org/aimix/review.svg?branch=master)](https://travis-ci.org/aimix/review)
-[![styleci](https://styleci.io/repos/CHANGEME/shield)](https://styleci.io/repos/CHANGEME)
-[![Coverage Status](https://coveralls.io/repos/github/aimix/review/badge.svg?branch=master)](https://coveralls.io/github/aimix/review?branch=master)
+[![Build Status](https://travis-ci.org/parabellumKoval/backpack-reviews.svg?branch=master)](https://travis-ci.org/parabellumKoval/backpack-reviews)
+[![Coverage Status](https://coveralls.io/repos/github/parabellumKoval/backpack-reviews/badge.svg?branch=master)](https://coveralls.io/github/parabellumKoval/backpack-reviews?branch=master)
 
-[![Packagist](https://img.shields.io/packagist/v/aimix/review.svg)](https://packagist.org/packages/aimix/review)
-[![Packagist](https://poser.pugx.org/aimix/review/d/total.svg)](https://packagist.org/packages/aimix/review)
-[![Packagist](https://img.shields.io/packagist/l/aimix/review.svg)](https://packagist.org/packages/aimix/review)
+[![Packagist](https://img.shields.io/packagist/v/parabellumKoval/backpack-reviews.svg)](https://packagist.org/packages/parabellumKoval/backpack-reviews)
+[![Packagist](https://poser.pugx.org/parabellumKoval/backpack-reviews/d/total.svg)](https://packagist.org/packages/parabellumKoval/backpack-reviews)
+[![Packagist](https://img.shields.io/packagist/l/parabellumKoval/backpack-reviews.svg)](https://packagist.org/packages/parabellumKoval/backpack-reviews)
 
-Package description: CHANGE ME
+This package provides a quick starter kit for implementing reviews for Laravel Backpack. Provides a database, CRUD interface, API routes and more.
 
 ## Installation
 
 Install via composer
 ```bash
-composer require aimix/review
+composer require parabellumKoval/backpack-reviews
 ```
 
-### Publish Configuration File
-
+Migrate
 ```bash
-php artisan vendor:publish --provider="Aimix\Review\ServiceProvider" --tag="config"
+php artisan migrate
+```
+
+### Publish
+
+#### Configuration File
+```bash
+php artisan vendor:publish --provider="Backpack\Reviews\ServiceProvider" --tag="config"
+```
+
+#### Views File
+```bash
+php artisan vendor:publish --provider="Backpack\Reviews\ServiceProvider" --tag="views"
+```
+
+#### Migrations File
+```bash
+php artisan vendor:publish --provider="Backpack\Reviews\ServiceProvider" --tag="migrations"
+```
+
+#### Routes File
+```bash
+php artisan vendor:publish --provider="Backpack\Reviews\ServiceProvider" --tag="routes"
 ```
 
 ## Usage
 
-CHANGE ME
+### Seeders
+```bash
+php artisan db:seed --class="Backpack\Reviews\database\seeders\ReviewSeeder"
+```
 
 ## Security
 
@@ -34,8 +57,5 @@ instead of using the issue tracker.
 
 ## Credits
 
-- [](https://github.com/aimix/review)
-- [All contributors](https://github.com/aimix/review/graphs/contributors)
-
-This package is bootstrapped with the help of
-[melihovv/laravel-package-generator](https://github.com/melihovv/laravel-package-generator).
+- [](https://github.com/parabellumKoval/backpack-reviews)
+- [All contributors](https://github.com/parabellumKoval/backpack-reviews/graphs/contributors)
