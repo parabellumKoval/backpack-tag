@@ -1,4 +1,4 @@
-# Backpack-store
+# Backpack-reviews
 
 [![Build Status](https://travis-ci.org/parabellumKoval/backpack-reviews.svg?branch=master)](https://travis-ci.org/parabellumKoval/backpack-reviews)
 [![Coverage Status](https://coveralls.io/repos/github/parabellumKoval/backpack-reviews/badge.svg?branch=master)](https://coveralls.io/github/parabellumKoval/backpack-reviews?branch=master)
