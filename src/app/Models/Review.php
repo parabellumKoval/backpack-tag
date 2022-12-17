@@ -73,7 +73,7 @@ class Review extends Model
     
     public function user()
     {
-      return $this->belongsTo(config('backpack.reviews.user_model', 'App\Models\User'));
+      return $this->belongsTo(config('backpack.reviews.user_model', 'App\Models\User'), 'owner_id');
     }
     
     public function parent()
@@ -86,9 +86,9 @@ class Review extends Model
       return $this->hasMany(self::class, 'parent_id');
     }
     
-    public function product()
+    public function reviewable()
     {
-      return $this->belongsTo(config('backpack.reviews.product_model', '\Backpack\Store\app\Models\Product'));
+      return $this->morphTo();
     }
     
     // public function transaction() {

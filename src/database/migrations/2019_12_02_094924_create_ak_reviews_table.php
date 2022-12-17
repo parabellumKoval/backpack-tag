@@ -14,22 +14,25 @@ class CreateAkReviewsTable extends Migration
     public function up()
     {
         Schema::create('ak_reviews', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             
+            $table->integer('owner_id')->nullable();
             $table->boolean('is_moderated')->default(0);
-            $table->string('type')->nullable();
+
             $table->string('name', 255);
-            $table->string('email', 255)->nullable();
-            $table->string('category', 255)->nullable();
-            $table->integer('product_id')->nullable();
-            $table->integer('rating')->nullable();
+            // $table->string('email', 255)->nullable();
+            // $table->string('category', 255)->nullable();
             $table->text('text');
             $table->json('extras', 255)->nullable();
+            $table->integer('rating')->nullable();
+            $table->integer('likes')->default(0);
+            $table->integer('dislikes')->default(0);
             
             $table->integer('parent_id')->default(0)->nullable();
             $table->integer('lft')->default(0)->nullable();
             $table->integer('rgt')->default(0)->nullable();
             $table->integer('depth')->default(0)->nullable();
+            $table->morphs('reviewable');
             
             $table->timestamps();
         });
