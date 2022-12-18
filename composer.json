@@ -60,7 +60,7 @@
   "extra": {
       "laravel": {
           "providers": [
-            "Backpack\\Reviews\\ReviewsServiceProvider"
+            "Backpack\\Reviews\\ServiceProvider"
           ],
           "aliases": {
             "Product": "Backpack\\Reviews\\Facades\\Reviews"

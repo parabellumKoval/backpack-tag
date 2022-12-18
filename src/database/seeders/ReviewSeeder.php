@@ -16,7 +16,7 @@ class ReviewSeeder extends Seeder
      */
     public function run()
     {
-      $USER_MODEL = config('backpack.reviews.user_model', 'App\Models\User');
+      $USER_MODEL = config('backpack.reviews.user_model', 'Backpack\Profile\app\Models\Profile');
       $PRODUCT_MODEL = config('backpack.reviews.product_model', 'Backpack\Store\app\Models\Product');
 
       $user = $USER_MODEL::inRandomOrder()->first();
