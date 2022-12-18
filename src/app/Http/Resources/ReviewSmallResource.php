@@ -20,7 +20,8 @@ class ReviewSmallResource extends JsonResource
         'likes' => $this->likes,
         'dislikes' => $this->dislikes,
         'text' => $this->text,
-        'user' => $this->user,
+        'owner' => $this->owner,
+        'children' => self::collection($this->children),
         'created_at' => $this->created_at
       ];
     }

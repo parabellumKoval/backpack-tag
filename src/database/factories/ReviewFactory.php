@@ -24,9 +24,9 @@ class ReviewFactory extends Factory
       return [
         'is_moderated' => $this->faker->randomElement([1,0]),
         'name' => $this->faker->name(),
-        'email' => 'ex@ex.com',
         'likes' => $this->faker->randomDigit(),
         'dislikes' => $this->faker->randomDigit(),
+        'rating' => $this->faker->numberBetween(1, config('backpack.reviews.rating_length', 5)),
         'text' => $this->faker->paragraph(2),
       ];
     }

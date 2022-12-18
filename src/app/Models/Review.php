@@ -28,7 +28,11 @@ class Review extends Model
     // protected $hidden = [];
     // protected $dates = [];
 	
-	  protected $with = ['user'];
+	  protected $with = ['owner'];
+
+    protected $casts = [
+      'extras' => 'array',
+    ];
 	
     /*
     |--------------------------------------------------------------------------
@@ -39,20 +43,13 @@ class Review extends Model
     {
       return [
         "id" => $this->id,
-        "is_moderated" => $this->is_moderated,
-        "type" => $this->type,
-        "name" => $this->name,
-        "email" => $this->email,
-        "category" => $this->category,
-        "product_id" => $this->product_id,
-        "children" => $this->children,
+        "owner" => $this->ownerModelOrInfo,
         "rating" => $this->rating,
         "likes" => $this->likes,
         "dislikes" => $this->dislikes,
-        "files" => $this->files,
         "text" => $this->text,
-        "photo" => url($this->photo),
-        "created_at" => \Carbon\Carbon::createFromTimeStamp(strtotime($this->created_at))->diffForHumans()
+        "created_at" => \Carbon\Carbon::createFromTimeStamp(strtotime($this->created_at))->diffForHumans(),
+        "children" => $this->children,
       ];
     }
 
@@ -71,9 +68,9 @@ class Review extends Model
     |--------------------------------------------------------------------------
     */
     
-    public function user()
+    public function owner()
     {
-      return $this->belongsTo(config('backpack.reviews.user_model', 'App\Models\User'), 'owner_id');
+      return $this->belongsTo(config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile'), 'owner_id');
     }
     
     public function parent()
@@ -100,12 +97,35 @@ class Review extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopeRoot($query)
+    {
+      return $query->where('parent_id', 0);
+    }
 
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getDetailedRatingAvrAttribute() {
+      if(isset($this->extras['rating']) && count($this->extras['rating'])) {
+        return array_sum($this->extras['rating']) / count($this->extras['rating']);
+      }else{
+        return 0;
+      }
+    }
+
+    public function getOwnerModelOrInfoAttribute() {
+      if($this->owner) {
+        return $this->owner;
+      }else if(isset($this->extras['owner'])){
+        return $this->extras['owner'];
+      }else {
+        return null;
+      }
+    }
+
+
     public function getPhotoAttribute(){
       
   /*

@@ -16,17 +16,20 @@ class ReviewSeeder extends Seeder
      */
     public function run()
     {
-      $USER_MODEL = config('backpack.reviews.user_model', 'App\Models\User');
-      $PRODUCT_MODEL = config('backpack.reviews.product_model', 'Backpack\Store\app\Models\Product');
+      $OWNER_MODEL = config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile');
+      $REVIEWABLE_MODEL = config('backpack.reviews.reviewable_model', 'Backpack\Store\app\Models\Product');
 
-      $user = $USER_MODEL::inRandomOrder()->first();
-      $products = $PRODUCT_MODEL::inRandomOrder()->limit(30)->get();
+      $user = $OWNER_MODEL::inRandomOrder()->first();
+      $reviewable_list = $REVIEWABLE_MODEL::inRandomOrder()->limit(30)->get();
 
-      foreach($products as $product){
+      foreach($reviewable_list as $item){
         Review::factory()
             ->count(10)
-            ->for($user)
-            ->for($product)
+            ->for($user, 'owner')
+            ->for($item, 'reviewable')
+            ->hasChildren(3, [
+              'owner_id' => $user->id,
+            ])
             ->create();
       }
     }

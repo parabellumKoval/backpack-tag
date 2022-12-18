@@ -19,11 +19,8 @@ class CreateAkReviewsTable extends Migration
             $table->integer('owner_id')->nullable();
             $table->boolean('is_moderated')->default(0);
 
-            $table->string('name', 255);
-            // $table->string('email', 255)->nullable();
-            // $table->string('category', 255)->nullable();
             $table->text('text');
-            $table->json('extras', 255)->nullable();
+            $table->json('extras')->nullable();
             $table->integer('rating')->nullable();
             $table->integer('likes')->default(0);
             $table->integer('dislikes')->default(0);

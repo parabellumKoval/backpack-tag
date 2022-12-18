@@ -9,9 +9,9 @@ use App\Notifications\ReviewBonus;
 class ReviewObserver
 {
   public function created(Review $review){
-    $product = $review->product;
+    //$product = $review->product;
 
-    $this->updateProductRating($product);
+    //$this->updateProductRating($product);
   }
 
 // Проблема:
@@ -20,63 +20,63 @@ class ReviewObserver
 // предыдущего значения рейтинга отзыва.
 
   public function updated(Review $review){
-    $product = $review->product;
-    $productId = $product? $product->id : null;
-    $originalProductId = $review->getOriginal()['product_id'];
+    // $product = $review->product;
+    // $productId = $product? $product->id : null;
+    // $originalProductId = $review->getOriginal()['product_id'];
 
-    if($originalProductId && $originalProductId != $productId) {
-      $this->updateProductRating(Product::find($originalProductId));
-    }
+    // if($originalProductId && $originalProductId != $productId) {
+    //   $this->updateProductRating(Product::find($originalProductId));
+    // }
 
-    $this->updateProductRating($product);
+    // $this->updateProductRating($product);
     
-    // Удалить из пакета
-    if($review->is_moderated && $review->transaction) {
-      $transaction = $review->transaction;
+    // // Удалить из пакета
+    // if($review->is_moderated && $review->transaction) {
+    //   $transaction = $review->transaction;
       
-      if(!$transaction)	return;
+    //   if(!$transaction)	return;
       
-      $usermeta = $transaction->usermeta;
+    //   $usermeta = $transaction->usermeta;
       
-      if(!$usermeta) return;
+    //   if(!$usermeta) return;
       	
-      $transaction->balance = $usermeta->bonus_balance + $transaction->change;
-      $transaction->is_completed = 1;
-      $transaction->created_at = now();
-      $transaction->save();
+    //   $transaction->balance = $usermeta->bonus_balance + $transaction->change;
+    //   $transaction->is_completed = 1;
+    //   $transaction->created_at = now();
+    //   $transaction->save();
       
-      $usermeta->notify(new ReviewBonus($transaction));
-      //\Auth::user()->usermeta->notify(new ReviewBonus($transaction));
-    }
+    //   $usermeta->notify(new ReviewBonus($transaction));
+    //   //\Auth::user()->usermeta->notify(new ReviewBonus($transaction));
+    // }
   }
 
   public function deleted(Review $review) {
-    $product = $review->product;
+    // $product = $review->product;
 
-    $this->updateProductRating($product);
+    // $this->updateProductRating($product);
   }
 
   public function updateProductRating($product) {
     
-    if($product == null)
-      return;
+    // if($product == null)
+    //   return;
 
-    $productReviews = $product->reviews->where('is_moderated', 1)->where('rating', '!=', null);
-    $averageRating = 0;
+    // $productReviews = $product->reviews->where('is_moderated', 1)->where('rating', '!=', null);
+    // $averageRating = 0;
 
-    if(!count($productReviews)) {
-      $product->rating = null;
-      $product->save();
-      return;
-    }
+    // if(!count($productReviews)) {
+    //   $product->rating = null;
+    //   $product->save();
+    //   return;
+    // }
 
-    foreach($productReviews as $review) {
-      $averageRating += $review->rating;
-    }
+    // foreach($productReviews as $review) {
+    //   $averageRating += $review->rating;
+    // }
 
-    $averageRating = $averageRating / count($productReviews);
-    $product->rating = round($averageRating);
-    $product->save();
+    // $averageRating = $averageRating / count($productReviews);
+    // $product->rating = round($averageRating);
+    // $product->save();
   }
   
 }

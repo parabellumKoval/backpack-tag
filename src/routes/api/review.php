@@ -25,6 +25,9 @@ Route::prefix('api/reviews')->controller(ReviewController::class)->group(functio
   
   Route::get('', 'index');
 
-  Route::get('/{slug}', 'show');
+  Route::get('/{id}', 'show');
+
+  Route::post('', 'create');
+  Route::post('{id}/like', 'likeOrDislike');
 
 });
