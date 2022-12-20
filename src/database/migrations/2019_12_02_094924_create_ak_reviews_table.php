@@ -29,7 +29,7 @@ class CreateAkReviewsTable extends Migration
             $table->integer('lft')->default(0)->nullable();
             $table->integer('rgt')->default(0)->nullable();
             $table->integer('depth')->default(0)->nullable();
-            $table->morphs('reviewable');
+            $table->nullableMorphs('reviewable');
             
             $table->timestamps();
         });
