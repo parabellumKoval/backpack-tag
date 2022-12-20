@@ -28,14 +28,14 @@ class ReviewController extends \App\Http\Controllers\Controller
                 $query->where('ak_reviews.reviewable_type', request('reviewable_type'));
               });
 
-    $per_page = config('backpack.reviews.per_page');
+    $per_page = config('backpack.reviews.per_page', 12);
     $reviews = $reviews->paginate($per_page);
 
     return ReviewSmallResource::collection($reviews);
   }
 
   public function create(Request $request) {
-    $data = $request->only(['owner', 'text', 'files', 'parent_id', 'reviewable_id', 'reviewable_type']);
+    $data = $request->only(['owner', 'text', 'files', 'parent_id', 'reviewable_id', 'reviewable_type', 'extras']);
 
     $validator = Validator::make($data, [
       'text' => 'required|string|min:2|max:1000',
@@ -52,10 +52,11 @@ class ReviewController extends \App\Http\Controllers\Controller
       return response()->json($validator->errors(), 400);
     }
 
-    $extras = [];
+    $extras = isset($data['extras'])? $data['extras']: [];
 
     if(isset($data['owner']) && isset($data['owner']['id'])) {
       $owner_model = config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile')::find($data['owner']['id']);
+      $extras['owner'] = $owner_model;
     }else if(isset($data['owner'])) {
       
       if(isset($data['owner']['name']))
@@ -74,8 +75,8 @@ class ReviewController extends \App\Http\Controllers\Controller
       'text' => $data['text'],
       'extras' => $extras,
       'parent_id' => isset($data['parent_id'])? $data['parent_id']: 0,
-      'reviewable_id' => $data['reviewable_id'],
-      'reviewable_type' => $data['reviewable_type'],
+      'reviewable_id' => isset($data['reviewable_id'])? $data['reviewable_id']: null,
+      'reviewable_type' => isset($data['reviewable_type'])? $data['reviewable_type']: null,
     ]);
 
     return response()->json($review);
