@@ -16,19 +16,26 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 class ReviewController extends \App\Http\Controllers\Controller
 { 
   public function index(Request $request) {
+    
+    $reviewable_id = request('reviewable_id');
+
+    if(request('reviewable_slug') && request('reviewable_type')) {
+      $reviewable = request('reviewable_type')::where('slug', request('reviewable_slug'))->first();
+      $reviewable_id = $reviewable? $reviewable->id: null;
+    }
 
     $reviews = Review::query()
               ->select('ak_reviews.*')
               ->distinct('ak_reviews.id')
               ->root()
-              ->when(request('reviewable_id'), function($query){
-                $query->where('ak_reviews.reviewable_id', request('reviewable_id'));
+              ->when($reviewable_id, function($query) use($reviewable_id){
+                $query->where('ak_reviews.reviewable_id', $reviewable_id);
               })
               ->when(request('reviewable_type'), function($query){
                 $query->where('ak_reviews.reviewable_type', request('reviewable_type'));
               });
 
-    $per_page = config('backpack.reviews.per_page', 12);
+    $per_page = request('per_page')? request('per_page'): config('backpack.reviews.per_page', 12);
     $reviews = $reviews->paginate($per_page);
 
     return ReviewSmallResource::collection($reviews);
