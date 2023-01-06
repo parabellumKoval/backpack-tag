@@ -11,6 +11,9 @@ return [
   // OWNER
   'owner_model' => 'Backpack\Profile\app\Models\Profile',
 
+  //GUARD
+  'auth_guard' => 'profile',
+
   // Seed batabase
   'reviewable_model' => 'Backpack\Store\app\Models\Product',
 

@@ -16,11 +16,11 @@ class ReviewSmallResource extends JsonResource
     {
       return [
         'id' => $this->id,
-        'name' => $this->name,
         'likes' => $this->likes,
         'dislikes' => $this->dislikes,
         'text' => $this->text,
-        'owner' => $this->owner,
+        'owner' => $this->ownerModelOrInfo,
+        'extras' => $this->extras,
         'children' => self::collection($this->children),
         'created_at' => $this->created_at
       ];

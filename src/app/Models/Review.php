@@ -48,7 +48,8 @@ class Review extends Model
         "likes" => $this->likes,
         "dislikes" => $this->dislikes,
         "text" => $this->text,
-        "created_at" => \Carbon\Carbon::createFromTimeStamp(strtotime($this->created_at))->diffForHumans(),
+        "extras" => $this->extras,
+        "created_at" => $this->created_at,
         "children" => $this->children,
       ];
     }
@@ -125,25 +126,6 @@ class Review extends Model
       }
     }
 
-
-    public function getPhotoAttribute(){
-      
-  /*
-      if(is_object($this->user->usermeta->photo))
-        dd($this->user->usermeta->photo);
-  */
-      
-      if($this->name == 'Incognito')
-        return url('/img/incognito.png');
-    
-      if($this->user && $this->user->usermeta && $this->user->usermeta->photo)
-        return url($this->user->usermeta->photo);
-      
-      if($this->file)
-        return url($this->file);
-      else
-        return url('/img/profile.png');	
-    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

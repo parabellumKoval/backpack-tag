@@ -20,6 +20,7 @@ use Backpack\Reviews\app\Http\Controllers\Api\ReviewController;
 //     return $request->user();
 // });
 
+$auth_guard = config('backpack.reviews.auth_guard', 'profile');
 
 Route::prefix('api/reviews')->controller(ReviewController::class)->group(function () {
   
@@ -27,7 +28,7 @@ Route::prefix('api/reviews')->controller(ReviewController::class)->group(functio
 
   Route::get('/{id}', 'show');
 
-  Route::post('', 'create');
+  Route::post('', 'create')->middleware(['api', "auth:${$auth_guard}"]);
   Route::post('{id}/like', 'likeOrDislike');
 
 });
