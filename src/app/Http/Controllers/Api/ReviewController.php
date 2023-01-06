@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 use Backpack\Reviews\app\Models\Review;
 
 use Backpack\Reviews\app\Http\Resources\ReviewSmallResource;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class ReviewController extends \App\Http\Controllers\Controller
 { 
@@ -42,30 +44,58 @@ class ReviewController extends \App\Http\Controllers\Controller
   }
 
   public function create(Request $request) {
-    $data = $request->only(['owner', 'text', 'files', 'parent_id', 'reviewable_id', 'reviewable_type', 'extras']);
+    $data = $request->only(['owner', 'text', 'files', 'parent_id', 'reviewable_id', 'reviewable_type', 'extras', 'provider']);
 
     $validator = Validator::make($data, [
       'text' => 'required|string|min:2|max:1000',
       'parent_id' => 'nullable|integer',
       'reviewable_id' => 'nullable|integer',
       'reviewable_type' => 'nullable|string|min:2|max:255',
-      'owner.id' => 'nullable|integer',
-      'owner.name' => 'nullable|string|min:2|max:100',
+      'owner.id' => 'required_if:provider,id|integer',
+      'owner.name' => 'required_if:provider,data|string|min:2|max:100',
       'owner.photo' => 'nullable|string',
       'owner.email' => 'nullable|email',
+      'provider' => 'required|string|in:id,data,auth',
+      'extras' => 'nullable|array'
     ]);
 
     if ($validator->fails()) {
       return response()->json($validator->errors(), 400);
     }
 
+    // SET EXTRAS FROM REQUEST
     $extras = isset($data['extras'])? $data['extras']: [];
 
-    if(isset($data['owner']) && isset($data['owner']['id'])) {
-      $owner_model = config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile')::find($data['owner']['id']);
+    // INIT OWNER MODEL
+    $owner_model = null;
+
+    // OWNER
+    // Set owner by id
+    if($data['provider'] === 'id' && isset($data['owner']) && isset($data['owner']['id']))
+    {
+      try{
+        $owner_model = config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile')::findOrFail($data['owner']['id']);
+      }catch(ModelNotFoundException $e) {
+        return response()->json($e->getMessage(), 404);
+      }
+
       $extras['owner'] = $owner_model;
-    }else if(isset($data['owner'])) {
-      
+    }
+
+    // Set owner from auth session
+    else if($data['provider'] === 'auth') 
+    {
+      if(!Auth::guard(config('backpack.reviews.auth_guard', 'profile'))->check()){
+        return response()->json('User not authenticated', 401);
+      }
+
+      $owner_model = Auth::guard(config('backpack.reviews.auth_guard', 'profile'))->user();
+      $extras['owner'] = $owner_model; 
+    }
+
+    // Set owner by exterior data
+    else if($data['provider'] === 'data' && isset($data['owner']))
+    {
       if(isset($data['owner']['name']))
         $extras['owner']['name'] = $data['owner']['name'];
       
@@ -73,18 +103,22 @@ class ReviewController extends \App\Http\Controllers\Controller
         $extras['owner']['photo'] = $data['owner']['photo'];
 
       if(isset($data['owner']['email']))
-        $extras['owner']['email'] = $data['owner']['email'];
-      
+        $extras['owner']['email'] = $data['owner']['email']; 
     }
 
-    $review = Review::create([
-      'owner_id' => isset($owner_model)? $owner_model->id: null,
-      'text' => $data['text'],
-      'extras' => $extras,
-      'parent_id' => isset($data['parent_id'])? $data['parent_id']: 0,
-      'reviewable_id' => isset($data['reviewable_id'])? $data['reviewable_id']: null,
-      'reviewable_type' => isset($data['reviewable_type'])? $data['reviewable_type']: null,
-    ]);
+    // CREATE REVIEW
+    try {
+      $review = Review::create([
+        'owner_id' => $owner_model? $owner_model->id: null,
+        'text' => $data['text'],
+        'extras' => $extras,
+        'parent_id' => isset($data['parent_id'])? $data['parent_id']: 0,
+        'reviewable_id' => isset($data['reviewable_id'])? $data['reviewable_id']: null,
+        'reviewable_type' => isset($data['reviewable_type'])? $data['reviewable_type']: null,
+      ]);
+    }catch(\Expression $e) {
+      return response()->json($e->getMessage(), 400);
+    }
 
     return response()->json($review);
   }
