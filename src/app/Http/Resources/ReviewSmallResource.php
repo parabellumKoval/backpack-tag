@@ -16,8 +16,8 @@ class ReviewSmallResource extends JsonResource
     {
       return [
         'id' => $this->id,
-        'likes' => $this->likes,
-        'dislikes' => $this->dislikes,
+        'likes' => $this->likes? $this->likes: 0,
+        'dislikes' => $this->dislikes? $this->dislikes: 0,
         'text' => $this->text,
         'owner' => $this->ownerModelOrInfo,
         'extras' => $this->extras,
