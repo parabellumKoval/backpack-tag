@@ -44,13 +44,14 @@ class ReviewController extends \App\Http\Controllers\Controller
   }
 
   public function create(Request $request) {
-    $data = $request->only(['owner', 'text', 'files', 'parent_id', 'reviewable_id', 'reviewable_type', 'extras', 'provider']);
+    $data = $request->only(['owner', 'text', 'files', 'parent_id', 'reviewable_id', 'reviewable_type', 'rating', 'extras', 'provider']);
 
     $validator = Validator::make($data, [
       'text' => 'required|string|min:2|max:1000',
       'parent_id' => 'nullable|integer',
       'reviewable_id' => 'nullable|integer',
       'reviewable_type' => 'nullable|string|min:2|max:255',
+      'rating' => 'nullable|integer',
       'owner.id' => 'required_if:provider,id|integer',
       'owner.name' => 'required_if:provider,data|string|min:2|max:100',
       'owner.photo' => 'nullable|string',
@@ -111,6 +112,7 @@ class ReviewController extends \App\Http\Controllers\Controller
       $review = Review::create([
         'owner_id' => $owner_model? $owner_model->id: null,
         'text' => $data['text'],
+        'rating' => $data['rating'],
         'extras' => $extras,
         'parent_id' => isset($data['parent_id'])? $data['parent_id']: 0,
         'reviewable_id' => isset($data['reviewable_id'])? $data['reviewable_id']: null,
