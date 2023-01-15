@@ -113,7 +113,7 @@ class ReviewController extends \App\Http\Controllers\Controller
       $review = Review::create([
         'owner_id' => $owner_model? $owner_model->id: null,
         'text' => $data['text'],
-        'rating' => $data['rating'],
+        'rating' => isset($data['rating'])? $data['rating']: null,
         'extras' => $extras,
         'parent_id' => isset($data['parent_id'])? $data['parent_id']: 0,
         'reviewable_id' => isset($data['reviewable_id'])? $data['reviewable_id']: null,
