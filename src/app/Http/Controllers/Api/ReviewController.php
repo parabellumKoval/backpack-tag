@@ -127,10 +127,9 @@ class ReviewController extends \App\Http\Controllers\Controller
   }
 
   public function likeOrDislike(Request $request, $id) {
-    $data = $request->only(['owner_id', 'direction', 'type']);
+    $data = $request->only(['direction', 'type']);
 
     $validator = Validator::make($data, [
-      'owner_id' => 'required|integer',
       'direction' => [ 
         'nullable',
         Rule::in(['minus', 'plus'])
@@ -147,10 +146,8 @@ class ReviewController extends \App\Http\Controllers\Controller
       return response()->json($validator->errors(), 400);
     }
 
-    try {
-      $owner_model = config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile')::findOrFail($data['owner_id']);
-    }catch(ModelNotFoundException $e) {
-      return response()->json($e->getMessage(), 404);
+    if(!Auth::guard(config('backpack.reviews.auth_guard', 'profile'))->check()){
+      return response()->json('User not authenticated', 401);
     }
 
     try {
