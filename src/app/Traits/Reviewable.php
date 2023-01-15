@@ -16,7 +16,8 @@ trait Reviewable {
   }
 
   public function getRatingAttribute() {
-    return $this->reviews()->avg('rating');
+    $rating = $this->reviews()->avg('rating');
+    return $rating? round($rating, 1): null;
   }
   
   public function getDetailedRatingAttribute() {
