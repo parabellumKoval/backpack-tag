@@ -8,15 +8,20 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-use Backpack\Reviews\app\Models\Review;
-
 use Backpack\Reviews\app\Http\Resources\ReviewSmallResource;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
 class ReviewController extends \App\Http\Controllers\Controller
-{ 
+{
+
+  private $review_model = '';
+
+  public function __construct() {
+    $this->review_model = config('backpack.reviews.review_model', 'Backpack\Reviews\app\Models\Review');
+  }
+
   public function index(Request $request) {
     
     $reviewable_id = request('reviewable_id');
@@ -26,7 +31,7 @@ class ReviewController extends \App\Http\Controllers\Controller
       $reviewable_id = $reviewable? $reviewable->id: null;
     }
 
-    $reviews = Review::query()
+    $reviews = $this->review_model::query()
               ->select('ak_reviews.*')
               ->distinct('ak_reviews.id')
               ->root()
@@ -43,6 +48,13 @@ class ReviewController extends \App\Http\Controllers\Controller
 
     return ReviewSmallResource::collection($reviews);
   }
+
+ /** 
+ * Create new review
+ *
+ * @param Request $request
+ * @return Review
+ **/
 
   public function create(Request $request) {
     $data = $request->only(['owner', 'text', 'files', 'parent_id', 'reviewable_id', 'reviewable_type', 'rating', 'extras', 'provider']);
@@ -73,7 +85,7 @@ class ReviewController extends \App\Http\Controllers\Controller
 
     // OWNER
     // Set owner by id
-    if($data['provider'] === 'id' && isset($data['owner']) && isset($data['owner']['id']))
+    if($data['provider'] === 'id')
     {
       try{
         $owner_model = config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile')::findOrFail($data['owner']['id']);
@@ -110,7 +122,7 @@ class ReviewController extends \App\Http\Controllers\Controller
 
     // CREATE REVIEW
     try {
-      $review = Review::create([
+      $review = $this->review_model::create([
         'owner_id' => $owner_model? $owner_model->id: null,
         'text' => $data['text'],
         'rating' => isset($data['rating'])? $data['rating']: null,
@@ -151,7 +163,7 @@ class ReviewController extends \App\Http\Controllers\Controller
     }
 
     try {
-      $review_model = Review::findOrFail($id);
+      $review_model = $this->review_model::findOrFail($id);
     }catch(ModelNotFoundException $e) {
       return response()->json($e->getMessage(), 404);
     }
