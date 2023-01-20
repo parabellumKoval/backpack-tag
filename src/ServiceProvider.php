@@ -2,18 +2,14 @@
 
 namespace Backpack\Reviews;
 
-use Backpack\Reviews\app\Observers\ReviewObserver;
-use Backpack\Reviews\app\Models\Review;
-
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     const CONFIG_PATH = __DIR__ . '/config/reviews.php';
     
     public function boot()
     {
-        Review::observe(ReviewObserver::class);
 
-        $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'review');
+      $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'review');
     
 	    // Migrations
 	    $this->loadMigrationsFrom(__DIR__.'/database/migrations');
@@ -49,8 +45,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             'reviews'
         );
 
-        $this->app->bind('review', function () {
-            return new Reviews();
-        });
+        // $this->app->bind('review', function () {
+        //     return new Reviews();
+        // });
     }
 }

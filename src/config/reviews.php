@@ -25,5 +25,8 @@ return [
     'param_3' => 'label_2',
   ],
 
-  'rating_length' => 5
+  'rating_length' => 5,
+
+  // Override
+  'review_model' => 'Backpack\Reviews\app\Models\Review' 
 ];
