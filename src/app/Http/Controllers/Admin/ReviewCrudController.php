@@ -19,7 +19,7 @@ class ReviewCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     public function setup()
     {
@@ -69,8 +69,8 @@ class ReviewCrudController extends CrudController
           'label' => 'Dislikes',
         ]);
         
-        $this->crud->removeColumn('Likes');
-        // $this->crud->removeColumn('extras');
+        //$this->crud->removeColumns(['lft', 'depth']);
+        // $this->crud->removeColumn('rgt');
     }
     
     protected function setupListOperation()
@@ -96,28 +96,30 @@ class ReviewCrudController extends CrudController
           'type' => 'check'
         ]);
         
-      if(config('backpack.reviews.enable_review_type')) {
-        $this->crud->addColumn([
-          'name' => 'type',
-          'label' => 'Тип',
-        ]);
-      }
+        if(config('backpack.reviews.enable_review_type')) {
+          $this->crud->addColumn([
+            'name' => 'type',
+            'label' => 'Тип',
+          ]);
+        }
       
         $this->crud->addColumn([
-          'name' => 'name',
-          'label' => 'Имя',
+          'name' => 'owner',
+          'label' => 'Автор',
+          'type' => 'relationship',
+          'attribute' => 'email'
         ]);
         
-      if(config('backpack.reviews.enable_review_for_product')) {
-        $this->crud->addColumn([
-          'name' => 'product_id',
-          'label' => 'Приобретённый товар',
-          'type' => 'select',
-          'entity' => 'Product',
-          'attribute' => 'name',
-          'model' => "Aimix\Shop\app\Models\Product",
-        ]);
-      }
+      // if(config('backpack.reviews.enable_review_for_product')) {
+      //   $this->crud->addColumn([
+      //     'name' => 'product_id',
+      //     'label' => 'Приобретённый товар',
+      //     'type' => 'select',
+      //     'entity' => 'Product',
+      //     'attribute' => 'name',
+      //     'model' => "Aimix\Shop\app\Models\Product",
+      //   ]);
+      // }
         
       if(config('backpack.reviews.enable_rating')) {
         $this->crud->addColumn([
@@ -153,9 +155,12 @@ class ReviewCrudController extends CrudController
       }
         
         $this->crud->addField([
-          'name' => 'name',
-          'label' => 'Имя',
+          'name' => 'owner',
+          'label' => 'Автор',
+          'type' => 'relationship',
+          'attribute' => 'email'
         ]);
+        
         
       if(config('backpack.reviews.enable_review_type')) {
         $this->crud->addField([
@@ -173,16 +178,16 @@ class ReviewCrudController extends CrudController
         ]);
       }
         
-      if(config('backpack.reviews.enable_review_for_product')) {
-        $this->crud->addField([
-          'name' => 'product_id',
-          'label' => 'Приобретённый товар',
-          'type' => 'select2',
-          'entity' => 'Product',
-          'attribute' => 'name',
-          'model' => "Aimix\Shop\app\Models\Product",
-        ]);
-      }
+      // if(config('backpack.reviews.enable_review_for_product')) {
+      //   $this->crud->addField([
+      //     'name' => 'product_id',
+      //     'label' => 'Приобретённый товар',
+      //     'type' => 'select2',
+      //     'entity' => 'Product',
+      //     'attribute' => 'name',
+      //     'model' => "Aimix\Shop\app\Models\Product",
+      //   ]);
+      // }
         
       if(config('backpack.reviews.enable_rating')) {
         $this->crud->addField([
