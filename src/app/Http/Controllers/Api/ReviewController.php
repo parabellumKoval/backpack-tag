@@ -158,9 +158,9 @@ class ReviewController extends \App\Http\Controllers\Controller
       return response()->json($validator->errors(), 400);
     }
 
-    if(!Auth::guard(config('backpack.reviews.auth_guard', 'profile'))->check()){
-      return response()->json('User not authenticated', 401);
-    }
+    // if(!Auth::guard(config('backpack.reviews.auth_guard', 'profile'))->check()){
+    //   return response()->json('User not authenticated', 401);
+    // }
 
     try {
       $review_model = $this->review_model::findOrFail($id);
