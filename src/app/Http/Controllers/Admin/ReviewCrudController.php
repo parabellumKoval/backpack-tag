@@ -91,9 +91,11 @@ class ReviewCrudController extends CrudController
         // $this->crud->setFromDb();
         
         $this->crud->addColumn([
-          'name' => 'photo',
+          'name' => 'photoAnyway',
           'label' => '',
-          'type' => 'image'
+          'type' => 'image',
+          'height' => '50px',
+          'width'  => '50px',
         ]);
         
         $this->crud->addColumn([
@@ -121,16 +123,6 @@ class ReviewCrudController extends CrudController
           'attribute' => 'email'
         ]);
         
-      // if(config('backpack.reviews.enable_review_for_product')) {
-      //   $this->crud->addColumn([
-      //     'name' => 'product_id',
-      //     'label' => 'Приобретённый товар',
-      //     'type' => 'select',
-      //     'entity' => 'Product',
-      //     'attribute' => 'name',
-      //     'model' => "Aimix\Shop\app\Models\Product",
-      //   ]);
-      // }
         
       if(config('backpack.reviews.enable_rating')) {
         $this->crud->addColumn([

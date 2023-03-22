@@ -149,6 +149,13 @@ class Review extends Model
       return $identity_string;
     }
 
+    public function getPhotoAnywayAttribute() {
+      if($this->ownerPhoto)
+        return $this->ownerPhoto;
+      else
+        null;
+    }
+
     public function getOwnerIdAttribute() {
       return $this->extras['owner']['id'] ?? null;
     }
