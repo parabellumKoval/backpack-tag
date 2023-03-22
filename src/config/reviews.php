@@ -28,5 +28,11 @@ return [
   'rating_length' => 5,
 
   // Override
-  'review_model' => 'Backpack\Reviews\app\Models\Review' 
+  'review_model' => 'Backpack\Reviews\app\Models\Review',
+
+  // Reviewable
+  'reviewable_types_list' => [
+    'Backpack\Store\app\Models\Product' => 'Товар',
+    'Backpack\Articles\app\Models\Article' => 'Статья'
+  ]
 ];

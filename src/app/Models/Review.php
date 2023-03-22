@@ -24,7 +24,21 @@ class Review extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+    protected $fillable = [
+      'text',
+      'is_moderated',
+      'rating',
+      'likes',
+      'dislikes',
+      'owner_id',
+      'parent_id',
+      'reviewable_type', 
+      'reviewable_id',
+      'ownerFullname',
+      'ownerPhoto',
+      'ownerEmail',
+      'ownerId'
+    ];
     // protected $hidden = [];
     // protected $dates = [];
 	
@@ -126,9 +140,65 @@ class Review extends Model
       }
     }
 
+    public function getShortIdentityAttribute() {
+      $identity_string = "id - {$this->id}";
+
+      if(!empty($this->text))
+        $identity_string .= " / " . substr($this->text, 0, 70) . '...';
+
+      return $identity_string;
+    }
+
+    public function getPhotoAnywayAttribute() {
+      if($this->ownerPhoto)
+        return $this->ownerPhoto;
+      else
+        null;
+    }
+
+    public function getOwnerIdAttribute() {
+      return $this->extras['owner']['id'] ?? null;
+    }
+
+    public function getOwnerFullnameAttribute() {
+      return $this->extras['owner']['fullname'] ?? null;
+    }
+    
+    public function getOwnerEmailAttribute() {
+      return $this->extras['owner']['email'] ?? null;
+    }
+    
+    public function getOwnerPhotoAttribute() {
+      return $this->extras['owner']['photo'] ?? null;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function setOwnerIdAttribute($value) {
+      $extras = $this->extras;
+      $extras['owner']['id'] = $value;
+      $this->extras = $extras;
+    }
+    
+    public function setOwnerEmailAttribute($value) {
+      $extras = $this->extras;
+      $extras['owner']['email'] = $value;
+      $this->extras = $extras;
+    }
+    
+    public function setOwnerFullnameAttribute($value) {
+      $extras = $this->extras;
+      $extras['owner']['fullname'] = $value;
+      $this->extras = $extras;
+    }
+
+    public function setOwnerPhotoAttribute($value) {
+      $extras = $this->extras;
+      $extras['owner']['photo'] = $value;
+      $this->extras = $extras;
+    }
 }
