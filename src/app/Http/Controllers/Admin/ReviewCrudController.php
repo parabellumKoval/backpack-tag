@@ -227,9 +227,10 @@ class ReviewCrudController extends CrudController
       ]);
 
       $this->crud->addField([
-        'name' => 'owner',
+        'name' => 'owner_id',
         'label' => 'Автор',
         'type' => 'relationship',
+        'model' => config('backapck.reviews.owner_model', 'Backpack\Profile\app\Models\Profile'),
         'attribute' => 'email',
         'hint' => 'Cсылка на пользователя в системе'
       ]);
@@ -247,7 +248,7 @@ class ReviewCrudController extends CrudController
       ]);
 
       $this->crud->addField([
-          'name' => 'ownerId',
+          'name' => 'extrasOwnerId',
           'label' => 'Id автора',
           'type' => 'number',
           'wrapper' => [ 
@@ -255,7 +256,7 @@ class ReviewCrudController extends CrudController
           ]
       ]);
       $this->crud->addField([
-          'name' => 'ownerFullname',
+          'name' => 'extrasOwnerFullname',
           'label' => 'Имя автора',
           'type'  => 'text',
           'wrapper' => [ 
@@ -263,7 +264,7 @@ class ReviewCrudController extends CrudController
           ]
       ]);
       $this->crud->addField([
-          'name' => 'ownerEmail',
+          'name' => 'extrasOwnerEmail',
           'label' => 'Email автора',
           'type'  => 'email',
           'wrapper' => [ 
@@ -271,7 +272,7 @@ class ReviewCrudController extends CrudController
           ]
       ]);
       $this->crud->addField([
-          'name' => 'ownerPhoto',
+          'name' => 'extrasOwnerPhoto',
           'label' => 'Фото автора',
           'type'  => 'browse',
           'wrapper' => [ 
