@@ -37,7 +37,8 @@ class Review extends Model
       'ownerFullname',
       'ownerPhoto',
       'ownerEmail',
-      'ownerId'
+      'ownerId',
+      'extras'
     ];
     // protected $hidden = [];
     // protected $dates = [];
@@ -131,10 +132,10 @@ class Review extends Model
     }
 
     public function getOwnerModelOrInfoAttribute() {
-      if($this->owner) {
-        return $this->owner;
-      }else if(isset($this->extras['owner'])){
+      if(isset($this->extras['owner'])){
         return $this->extras['owner'];
+      }elseif($this->owner){
+        return $this->owner;
       }else {
         return null;
       }
