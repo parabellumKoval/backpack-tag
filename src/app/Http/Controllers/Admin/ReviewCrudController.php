@@ -17,7 +17,8 @@ class ReviewCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation  { update as traitUpdate; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    // use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation  { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -41,47 +42,6 @@ class ReviewCrudController extends CrudController
 
     protected function setupShowOperation()
     {
-	      //$this->crud->set('show.setFromDb', false);
-	     
-        $this->crud->addColumn([
-          'name' => 'created_at',
-          'label' => 'Дата'
-        ]);
-        
-        $this->crud->addColumn([
-          'name' => 'photo',
-          'label' => 'Фото',
-          'type' => 'image'
-        ]); 
-        
-        $this->crud->addColumn([
-          'name' => 'name',
-          'label' => 'Имя',
-        ]);
-        
-        $this->crud->addColumn([
-          'name' => 'text',
-          'label' => 'Текст',
-        ]);
-        
-        $this->crud->addColumn([
-          'name' => 'is_moderated',
-          'label' => 'Опубликовано',
-          'type' => 'check'
-        ]);
-        
-        $this->crud->addColumn([
-          'name' => 'likes',
-          'label' => 'Likes',
-        ]);
-        
-        $this->crud->addColumn([
-          'name' => 'dislikes',
-          'label' => 'Dislikes',
-        ]);
-        
-        //$this->crud->removeColumns(['lft', 'depth']);
-        // $this->crud->removeColumn('rgt');
     }
     
     protected function setupListOperation()
@@ -134,19 +94,39 @@ class ReviewCrudController extends CrudController
 
     protected function setupCreateOperation()
     {
-       // $this->crud->setValidation(ReviewRequest::class);
+       $this->crud->setValidation(ReviewRequest::class);
 
         // TODO: remove setFromDb() and manually define Fields
         // $this->crud->setFromDb();
       
+        
+      $this->crud->addField([
+        'name' => 'is_moderated',
+        'label' => 'Опубликовано',
+        'type' => 'boolean'
+      ]);
+      
+      $this->crud->addField([
+        'name' => 'parent',
+        'label' => 'Родительский комментарий',
+        'type' => 'relationship',
+        'attribute' => 'shortIdentity'
+      ]);
+
+      // $this->crud->addField([
+      //   'name'  => 'separator_0',
+      //   'type'  => 'custom_html',
+      //   'value' => '<hr>'
+      // ]);
+
       $js_attributes = [
         'data-value' => '',
         'onfocus' => "this.setAttribute('data-value', this.value);",
         'onchange' => "
             const value = event.target.value
-            let isBoss = confirm('Несохраненные данные будут сброшены. Все равно продолжить?');
+            let isConfirmed = confirm('Несохраненные данные будут сброшены. Все равно продолжить?');
             
-            if(isBoss) {
+            if(isConfirmed) {
               reload_page(event);
             } else{
               this.value = this.getAttribute('data-value');
@@ -188,63 +168,80 @@ class ReviewCrudController extends CrudController
       ];
 
       $this->crud->addField([
+        'name'  => 'separator_1',
+        'type'  => 'custom_html',
+        'value' => '<hr>'
+      ]);
+
+      $this->crud->addField([
+        'name'  => 'caption_0',
+        'type'  => 'custom_html',
+        'value' => '<h5>Связанные данные</h5>'
+      ]);
+
+      $this->crud->addField([
         'name' => 'reviewable_type',
-        'label' => 'Тип',
+        'label' => 'Тип связанной модели',
         'type' => 'select_from_array',
         'options' => $this->reviewableList,
         'value' => $this->getReviewableType(),
-        'attributes' => $js_attributes
+        'attributes' => $js_attributes,
+        'allows_null' => true,
+        'default' => null,
       ]);
+
+      if(!$this->getReviewableTypeModel()) {
+        $attrs = [
+          'disabled' => 'disabled'
+        ];
+      }else {
+        $attrs = [];
+      }
 
       $this->crud->addField([
         'name' => 'reviewable_id',
-        'label' => 'Id',
+        'label' => $this->getReviewableName(),
         'type' => "relationship",
-        'model' => $this->getReviewableType(),
+        'model' => $this->getReviewableTypeModel(),
+        'allows_null' => true,
+        'attributes' => $attrs
       ]); 
         
-      $this->crud->addField([
-        'name' => 'is_moderated',
-        'label' => 'Опубликовано',
-        'type' => 'boolean'
-      ]);
-        
-      if(config('backpack.reviews.enable_review_type')) {
-        $this->crud->addField([
-          'name' => 'type',
-          'label' => 'Тип',
-          'type' => 'select_from_array',
-          'options' => [
-            'text' => 'Текстовый',
-            'video' => 'Видео'
-          ]
-        ]);
-      }
-      
-      $this->crud->addField([
-        'name' => 'parent',
-        'label' => 'Родительский комментарий',
-        'type' => 'relationship',
-        'attribute' => 'shortIdentity'
-      ]);
+      // if(config('backpack.reviews.enable_review_type')) {
+      //   $this->crud->addField([
+      //     'name' => 'type',
+      //     'label' => 'Тип',
+      //     'type' => 'select_from_array',
+      //     'options' => [
+      //       'text' => 'Текстовый',
+      //       'video' => 'Видео'
+      //     ]
+      //   ]);
+      // }
 
+
+      $this->crud->addField([
+        'name'  => 'separator_2',
+        'type'  => 'custom_html',
+        'value' => '<hr>'
+      ]);
 
       $this->crud->addField([
         'name' => 'owner',
         'label' => 'Автор',
         'type' => 'relationship',
         'attribute' => 'email',
-        'hint' => 'Cсылка на зарегистрированного пользователя'
+        'hint' => 'Cсылка на пользователя в системе'
       ]);
 
       $this->crud->addField([
-        'name'  => 'separator',
+        'name'  => 'separator_3',
         'type'  => 'custom_html',
         'value' => '<hr>'
       ]);
 
       $this->crud->addField([
-        'name'  => 'caption',
+        'name'  => 'caption_1',
         'type'  => 'custom_html',
         'value' => '<h5>Автор (статические данные)</h5>'
       ]);
@@ -283,75 +280,10 @@ class ReviewCrudController extends CrudController
       ]);
 
       $this->crud->addField([
-        'name'  => 'separator_2',
+        'name'  => 'separator_4',
         'type'  => 'custom_html',
         'value' => '<hr>'
       ]);
-
-      // $this->crud->addField([
-      //   'name' => 'user',
-      //   'label' => 'Автор',
-      //   'type'  => 'repeatable',
-      //   'fields' => [
-      //       [
-      //           'name'    => 'name',
-      //           'type'    => 'text',
-      //           'label'   => 'Name',
-      //           'wrapper' => ['class' => 'form-group col-md-4'],
-      //       ],
-      //       [
-      //           'name'    => 'position',
-      //           'type'    => 'text',
-      //           'label'   => 'Position',
-      //           'wrapper' => ['class' => 'form-group col-md-4'],
-      //       ],
-      //       [
-      //           'name'    => 'company',
-      //           'type'    => 'text',
-      //           'label'   => 'Company',
-      //           'wrapper' => ['class' => 'form-group col-md-4'],
-      //       ],
-      //       [
-      //           'name'  => 'quote',
-      //           'type'  => 'ckeditor',
-      //           'label' => 'Quote',
-      //       ],
-      //   ],
-      //   'fake'     => true, 
-      //   'store_in' => 'extras',
-      //   'init_rows' => 1, // number of empty rows to be initialized, by default 1
-      //   'min_rows' => 1, // minimum rows allowed, when reached the "delete" buttons will be hidden
-      //   'max_rows' => 1
-      // ]);
-
-        
-        
-      // if(config('backpack.reviews.enable_review_type')) {
-      //   $this->crud->addField([
-      //     'name' => 'file',
-      //     'label' => 'Фото/видео',
-      //     'type' => 'browse',
-      //     'disc' => 'review',
-      //   ]);
-      // } else {
-      //   $this->crud->addField([
-      //     'name' => 'file',
-      //     'label' => 'Фото',
-      //     'type' => 'browse',
-      //     'disc' => 'review',
-      //   ]);
-      // }
-        
-      // if(config('backpack.reviews.enable_review_for_product')) {
-      //   $this->crud->addField([
-      //     'name' => 'product_id',
-      //     'label' => 'Приобретённый товар',
-      //     'type' => 'select2',
-      //     'entity' => 'Product',
-      //     'attribute' => 'name',
-      //     'model' => "Aimix\Shop\app\Models\Product",
-      //   ]);
-      // }
         
       if(config('backpack.reviews.enable_rating')) {
         $this->crud->addField([
@@ -390,7 +322,7 @@ class ReviewCrudController extends CrudController
 
 
       $this->crud->addField([
-        'name'  => 'separator_3',
+        'name'  => 'separator_5',
         'type'  => 'custom_html',
         'value' => '<hr>'
       ]);
@@ -405,6 +337,10 @@ class ReviewCrudController extends CrudController
         'name' => 'likes',
         'label' => 'Лайки',
         'type' => 'number',
+        'default' => 0,
+        'attributes' => [
+          'min' => 0
+        ],
         'wrapper' => [ 
           'class' => 'form-group col-md-4'
         ]
@@ -414,6 +350,10 @@ class ReviewCrudController extends CrudController
         'name' => 'dislikes',
         'label' => 'Дизлайки',
         'type' => 'number',
+        'default' => 0,
+        'attributes' => [
+          'min' => 0
+        ],
         'wrapper' => [ 
           'class' => 'form-group col-md-4'
         ]
@@ -433,20 +373,38 @@ class ReviewCrudController extends CrudController
     }
 
     private function getReviewableType() {
-      if(\Request::get('reviewable_type'))
-        return \Request::get('reviewable_type');
-      elseif($this->entry && $this->entry->reviewable_type)
+      $reviewable_type = \Request::get('reviewable_type');
+
+      if(\Request::has('reviewable_type')){
+        return $reviewable_type? $reviewable_type: 'null';
+      } elseif($this->entry && $this->entry->reviewable_type){
         return $this->entry->reviewable_type;
-      else
+      } else {
+        return 'null';
+      }
+    }
+
+    private function getReviewableTypeModel() {
+      $model_string = $this->getReviewableType();
+
+      if($model_string === 'null')
         return null;
-
+      else
+        return $model_string;
     }
 
-    public function update($request){
-      $requestData = \Request::all();
-      $requestData['http_referrer'] = 'https://google.com';
-
-      $response = $this->traitUpdate();
-      return $response;
+    private function getReviewableName() {
+      if($this->getReviewableType())
+        return $this->reviewableList[$this->getReviewableType()] ?? 'Запись';
+      else
+        return 'Запись';
     }
+
+    // public function update($request){
+    //   $requestData = \Request::all();
+    //   $requestData['http_referrer'] = 'https://google.com';
+
+    //   $response = $this->traitUpdate();
+    //   return $response;
+    // }
 }

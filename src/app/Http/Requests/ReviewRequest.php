@@ -30,8 +30,9 @@ class ReviewRequest extends FormRequest
         $this->redirect = url()->previous().'#review_' . $type;
       
         return [
-            $type . '_review_name' => 'required',
-            $type . '_review_text' => 'required',
+          'text' => 'required',
+            // $type . '_review_name' => 'required',
+            // $type . '_review_text' => 'required',
             // $type . '_review_isAgree' => 'required',
         ];
     }
