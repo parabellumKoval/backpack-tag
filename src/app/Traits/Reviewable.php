@@ -4,7 +4,10 @@ namespace Backpack\Reviews\app\Traits;
 
 trait Reviewable {
   public function reviews(){
-    $model = config('backpack.reviews.review_model', 'Backpack\Reviews\app\Models\Review');
+    $model = config('backpack.reviews.review_model', null);
+
+    if(!$model)
+      return null;
 
     return $this->morphMany($model, 'reviewable');
   }
