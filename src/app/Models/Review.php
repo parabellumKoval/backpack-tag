@@ -86,7 +86,12 @@ class Review extends Model
     
     public function owner()
     {
-      return $this->belongsTo(config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile'), 'owner_id');
+      $model = config('backpack.reviews.owner_model', null);
+
+      if(!$model)
+        return null;
+
+      return $this->belongsTo($model, 'owner_id');
     }
     
     public function parent()
@@ -103,10 +108,6 @@ class Review extends Model
     {
       return $this->morphTo();
     }
-    
-    // public function transaction() {
-    //   return $this->hasOne('Backpack\Account\app\Models\Transaction');
-    // }
 
     /*
     |--------------------------------------------------------------------------
