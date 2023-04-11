@@ -43,7 +43,8 @@ class Review extends Model
     // protected $hidden = [];
     // protected $dates = [];
 	
-	  protected $with = ['owner'];
+    // !!!!
+	  // protected $with = ['owner'];
 
     protected $casts = [
       'extras' => 'array',
