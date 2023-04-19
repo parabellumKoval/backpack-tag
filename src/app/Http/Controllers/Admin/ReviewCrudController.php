@@ -59,7 +59,7 @@ class ReviewCrudController extends CrudController
 
       $this->crud->addColumn([
         'name' => 'photoAnyway',
-        'label' => '',
+        'label' => '📷',
         'type' => 'image',
         'height' => '50px',
         'width'  => '50px',
@@ -67,7 +67,7 @@ class ReviewCrudController extends CrudController
       
       $this->crud->addColumn([
         'name' => 'created_at',
-        'label' => 'Дата'
+        'label' => '🗓'
       ]);
       
       if(config('backpack.reviews.enable_review_type')) {

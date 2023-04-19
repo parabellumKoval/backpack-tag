@@ -153,8 +153,8 @@ class Review extends Model
     }
 
     public function getPhotoAnywayAttribute() {
-      if($this->ownerPhoto)
-        return $this->ownerPhoto;
+      if($this->extrasOwnerPhoto)
+        return $this->extrasOwnerPhoto;
       else
         null;
     }
