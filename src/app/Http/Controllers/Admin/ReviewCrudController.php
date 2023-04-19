@@ -32,6 +32,7 @@ class ReviewCrudController extends CrudController
 
         // CURRENT MODEL
         $this->setEntry();
+        //dd($this->entry->owner_id);
 
         // if($this->crud->getCurrentOperation() === 'update' && \Request::query('reviewable_type')){
         //   $redirect_to = \Request::url();
@@ -46,50 +47,70 @@ class ReviewCrudController extends CrudController
     
     protected function setupListOperation()
     {
-        // TODO: remove setFromDb() and manually define Columns, maybe Filters
-        
-        // $this->crud->setFromDb();
-        
-        $this->crud->addColumn([
-          'name' => 'photoAnyway',
-          'label' => '',
-          'type' => 'image',
-          'height' => '50px',
-          'width'  => '50px',
-        ]);
-        
-        $this->crud->addColumn([
-          'name' => 'created_at',
-          'label' => 'Дата'
-        ]);
-               
-        $this->crud->addColumn([
-          'name' => 'is_moderated',
-          'label' => 'Опубликовано',
-          'type' => 'check'
-        ]);
-        
-        if(config('backpack.reviews.enable_review_type')) {
-          $this->crud->addColumn([
-            'name' => 'type',
-            'label' => 'Тип',
-          ]);
-        }
+      // TODO: remove setFromDb() and manually define Columns, maybe Filters
       
+      // $this->crud->setFromDb();
+              
+      $this->crud->addColumn([
+        'name' => 'is_moderated',
+        'label' => '✅',
+        'type' => 'check'
+      ]);
+
+      $this->crud->addColumn([
+        'name' => 'photoAnyway',
+        'label' => '',
+        'type' => 'image',
+        'height' => '50px',
+        'width'  => '50px',
+      ]);
+      
+      $this->crud->addColumn([
+        'name' => 'created_at',
+        'label' => 'Дата'
+      ]);
+      
+      if(config('backpack.reviews.enable_review_type')) {
         $this->crud->addColumn([
-          'name' => 'owner',
+          'name' => 'type',
+          'label' => 'Тип',
+        ]);
+      }
+    
+      if(config('backapck.reviews.owner_model')) {
+        $this->crud->addColumn([
+          'name' => 'user',
           'label' => 'Автор',
           'type' => 'relationship',
           'attribute' => 'email'
         ]);
-        
-        
+      }
+      
       if(config('backpack.reviews.enable_rating')) {
         $this->crud->addColumn([
           'name' => 'rating',
-          'label' => 'Оценка',
+          'label' => '⭐',
         ]);
       }
+
+      if(config('backpack.reviews.enable_likes')) {
+        $this->crud->addColumn([
+          'name' => 'likes',
+          'label' => '👍',
+        ]);
+      }
+
+      if(config('backpack.reviews.enable_likes')) {
+        $this->crud->addColumn([
+          'name' => 'dislikes',
+          'label' => '👎',
+        ]);
+      }
+
+      $this->crud->addColumn([
+        'name' => 'text',
+        'label' => 'Текст'
+      ]);
     }
 
     protected function setupCreateOperation()
@@ -226,14 +247,16 @@ class ReviewCrudController extends CrudController
         'value' => '<hr>'
       ]);
 
-      $this->crud->addField([
-        'name' => 'owner_id',
-        'label' => 'Автор',
-        'type' => 'relationship',
-        'model' => config('backapck.reviews.owner_model', 'Backpack\Profile\app\Models\Profile'),
-        'attribute' => 'email',
-        'hint' => 'Cсылка на пользователя в системе'
-      ]);
+      if(config('backapck.reviews.owner_model')) {
+        $this->crud->addField([
+          'name' => 'owner_id',
+          'label' => 'Автор',
+          'type' => 'relationship',
+          'model' => config('backapck.reviews.owner_model'),
+          'attribute' => 'email',
+          'hint' => 'Cсылка на пользователя в системе'
+        ]);
+      }
 
       $this->crud->addField([
         'name'  => 'separator_3',

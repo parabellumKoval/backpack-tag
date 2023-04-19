@@ -2,14 +2,14 @@
 
 return [
   'enable_review_type' => false,
-  'enable_review_for_product' => true,
   'enable_rating' => true,
+  'enable_likes' => true,
 
   // CATALOG
   'per_page' => 12,
 
   // OWNER
-  'owner_model' => 'Backpack\Profile\app\Models\Profile',
+  'owner_model' => null,
 
   //GUARD
   'auth_guard' => 'profile',

@@ -85,7 +85,7 @@ class Review extends Model
     |--------------------------------------------------------------------------
     */
     
-    public function owner()
+    public function user()
     {
       $model = config('backpack.reviews.owner_model', null);
 
@@ -136,8 +136,8 @@ class Review extends Model
     public function getOwnerModelOrInfoAttribute() {
       if(isset($this->extras['owner'])){
         return $this->extras['owner'];
-      }elseif($this->owner){
-        return $this->owner;
+      }elseif($this->user){
+        return $this->user;
       }else {
         return null;
       }
