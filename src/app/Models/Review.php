@@ -125,6 +125,18 @@ class Review extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getShortReviewableAttribute() {
+      if(!$this->reviewable)
+        return null;
+      
+      return [
+        'id' => $this->reviewable->id,
+        'name' => $this->reviewable->name,
+        'slug' => $this->reviewable->slug,
+        'class' => get_class($this->reviewable)
+      ];
+    }
+
     public function getDetailedRatingAvrAttribute() {
       if(isset($this->extras['rating']) && count($this->extras['rating'])) {
         return array_sum($this->extras['rating']) / count($this->extras['rating']);

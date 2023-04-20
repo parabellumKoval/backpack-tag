@@ -23,6 +23,7 @@ class ReviewSmallResource extends JsonResource
         'owner' => $this->ownerModelOrInfo,
         'extras' => $this->extras,
         'children' => self::collection($this->children),
+        'reviewable' => $this->shortReviewable,
         'created_at' => $this->created_at
       ];
     }
