@@ -176,7 +176,7 @@ class Review extends Model
     }
 
     public function getExtrasOwnerFullnameAttribute() {
-      return $this->extras['owner']['fullname'] ?? null;
+      return $this->extras['owner']['name'] ?? null;
     }
     
     public function getExtrasOwnerEmailAttribute() {
@@ -207,7 +207,7 @@ class Review extends Model
     
     public function setExtrasOwnerFullnameAttribute($value) {
       $extras = $this->extras;
-      $extras['owner']['fullname'] = $value;
+      $extras['owner']['name'] = $value;
       $this->extras = $extras;
     }
 
