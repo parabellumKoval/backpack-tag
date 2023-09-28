@@ -124,7 +124,7 @@ class ReviewController extends \App\Http\Controllers\Controller
     try {
       $review = $this->review_model::create([
         'owner_id' => $owner_model? $owner_model->id: null,
-        'text' => $data['text'],
+        'text' => isset($data['text'])? strip_tags($data['text']): '',
         'rating' => isset($data['rating'])? $data['rating']: null,
         'extras' => $extras,
         'parent_id' => isset($data['parent_id'])? $data['parent_id']: 0,
