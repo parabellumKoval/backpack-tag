@@ -41,6 +41,9 @@ class ReviewController extends \App\Http\Controllers\Controller
               ->when(request('reviewable_type'), function($query){
                 $query->where('ak_reviews.reviewable_type', request('reviewable_type'));
               })
+              ->when(request('is_moderated'), function($query){
+                $query->where('ak_reviews.is_moderated', request('is_moderated'));
+              })
               ->orderBy('created_at', 'desc');
 
     $per_page = request('per_page')? request('per_page'): config('backpack.reviews.per_page', 12);
