@@ -34,10 +34,10 @@ class Review extends Model
       'parent_id',
       'reviewable_type', 
       'reviewable_id',
-      'extrasOwnerFullname',
-      'extrasOwnerPhoto',
-      'extrasOwnerEmail',
-      'extrasOwnerId',
+      // 'extrasOwnerFullname',
+      // 'extrasOwnerPhoto',
+      // 'extrasOwnerEmail',
+      // 'extrasOwnerId',
       'extras'
     ];
     // protected $hidden = [];
@@ -124,7 +124,12 @@ class Review extends Model
     |--------------------------------------------------------------------------
     | ACCESSORS
     |--------------------------------------------------------------------------
-    */
+    */    
+    /**
+     * getShortReviewableAttribute
+     *
+     * @return void
+     */
     public function getShortReviewableAttribute() {
       if(!$this->reviewable)
         return null;
@@ -136,7 +141,12 @@ class Review extends Model
         'class' => get_class($this->reviewable)
       ];
     }
-
+    
+    /**
+     * getDetailedRatingAvrAttribute
+     *
+     * @return void
+     */
     public function getDetailedRatingAvrAttribute() {
       if(isset($this->extras['rating']) && count($this->extras['rating'])) {
         return array_sum($this->extras['rating']) / count($this->extras['rating']);
@@ -144,7 +154,12 @@ class Review extends Model
         return 0;
       }
     }
-
+    
+    /**
+     * getOwnerModelOrInfoAttribute
+     *
+     * @return void
+     */
     public function getOwnerModelOrInfoAttribute() {
       if(isset($this->extras['owner'])){
         return $this->extras['owner'];
@@ -154,7 +169,12 @@ class Review extends Model
         return null;
       }
     }
-
+    
+    /**
+     * getShortIdentityAttribute
+     *
+     * @return void
+     */
     public function getShortIdentityAttribute() {
       $identity_string = "id - {$this->id}";
 
@@ -163,7 +183,12 @@ class Review extends Model
 
       return $identity_string;
     }
-
+    
+    /**
+     * getPhotoAnywayAttribute
+     *
+     * @return void
+     */
     public function getPhotoAnywayAttribute() {
       if($this->extrasOwnerPhoto)
         return $this->extrasOwnerPhoto;
@@ -172,48 +197,58 @@ class Review extends Model
     }
 
     public function getExtrasOwnerIdAttribute() {
-      return $this->extras['owner']['id'] ?? null;
+      return $this->extras['owner'][0]['id'] ?? null;
     }
 
     public function getExtrasOwnerFullnameAttribute() {
-      return $this->extras['owner']['name'] ?? null;
+      return $this->extras['owner'][0]['name'] ?? null;
     }
     
     public function getExtrasOwnerEmailAttribute() {
-      return $this->extras['owner']['email'] ?? null;
+      return $this->extras['owner'][0]['email'] ?? null;
     }
     
     public function getExtrasOwnerPhotoAttribute() {
-      return $this->extras['owner']['photo'] ?? null;
+      return $this->extras['owner'][0]['photo'] ?? null;
     }
 
+    // public function getOwnerAttribute() {
+    //   dd($this->extras['owner']);
+    // }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
     |--------------------------------------------------------------------------
     */
 
-    public function setExtrasOwnerIdAttribute($value) {
-      $extras = $this->extras;
-      $extras['owner']['id'] = $value;
-      $this->extras = $extras;
-    }
-    
-    public function setExtrasOwnerEmailAttribute($value) {
-      $extras = $this->extras;
-      $extras['owner']['email'] = $value;
-      $this->extras = $extras;
-    }
-    
-    public function setExtrasOwnerFullnameAttribute($value) {
-      $extras = $this->extras;
-      $extras['owner']['name'] = $value;
-      $this->extras = $extras;
-    }
+    // public function setOwnerAttribute($value) {
+    //   // dd(['owner', $value]);
+    //   // echo 'set';
+    // }
 
-    public function setExtrasOwnerPhotoAttribute($value) {
-      $extras = $this->extras;
-      $extras['owner']['photo'] = $value;
-      $this->extras = $extras;
-    }
+    // public function setOwnerIdAttribute($value) {
+    //   $extras = $this->extras;
+    //   $extras['owner']['id'] = $value;
+    //   $this->extras = $extras;
+    // }
+    
+    // public function setExtrasOwnerEmailAttribute($value) {
+    //   dd(['ownerEmail', $value]);
+    //   $extras = $this->extras;
+    //   $extras['owner']['email'] = $value;
+    //   $this->extras = $extras;
+    // }
+    
+    // public function setOwnerFullnameAttribute($value) {
+    //   dd(['ownerFullname', $value]);
+    //   $extras = $this->extras;
+    //   $extras['owner']['name'] = $value;
+    //   $this->extras = $extras;
+    // }
+
+    // public function setExtrasOwnerPhotoAttribute($value) {
+    //   $extras = $this->extras;
+    //   $extras['owner']['photo'] = $value;
+    //   $this->extras = $extras;
+    // }
 }

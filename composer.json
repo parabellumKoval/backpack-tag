@@ -18,29 +18,24 @@
     }
   ],
   "require": {
-    "php": ">=7.4"
+    "php": "^7.3|^8.0",
+    "laravel/framework": "^8.75",
+    "backpack/crud": "4.1.*"
   },
   "require-dev": {
-    "laravel/pint": "^1.0",
-    "nunomaduro/collision": "^6.0",
-    "nunomaduro/larastan": "^2.0.1",
-    "orchestra/testbench": "^7.0",
-    "pestphp/pest": "^1.21",
-    "pestphp/pest-plugin-laravel": "^1.1",
-    "phpstan/extension-installer": "^1.1",
-    "phpstan/phpstan-deprecation-rules": "^1.0",
-    "phpstan/phpstan-phpunit": "^1.0",
-    "phpunit/phpunit": "^9.5"
+    "orchestra/testbench": "^6.0",
+    "phpunit/phpunit": "*"
   },
   "autoload": {
     "psr-4": {
-        "Backpack\\Reviews\\": "src",
-        "Backpack\\Reviews\\Database\\Factories\\": "database/factories"
+      "Backpack\\Reviews\\": "src",
+      "Backpack\\Reviews\\Database\\Factories\\": "database/factories"
     }
   },
   "autoload-dev": {
     "psr-4": {
-        "Backpack\\Reviews\\Tests\\": "tests"
+      "App\\": "src/app/",
+      "Backpack\\Reviews\\Tests\\": "tests"
     }
   },
   "scripts": {

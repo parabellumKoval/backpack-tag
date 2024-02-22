@@ -15,7 +15,7 @@ return [
   'auth_guard' => 'profile',
 
   // Seed batabase
-  'reviewable_model' => 'Backpack\Store\app\Models\Product',
+  'reviewable_model' => null,
 
   'rating_type' => 'detailed', // 'detailed' - allow multiple rating params, 'simple' - allow only single digit  
 

@@ -22,23 +22,27 @@ class ReviewCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
+    use \App\Http\Controllers\Admin\Traits\ReviewCrud;
+
     public function setup()
     {
-        $this->crud->setModel('Backpack\Reviews\app\Models\Review');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/review');
-        $this->crud->setEntityNameStrings('отзыв', 'отзывы');
+      $this->crud->setModel('Backpack\Reviews\app\Models\Review');
+      $this->crud->setRoute(config('backpack.base.route_prefix') . '/review');
+      $this->crud->setEntityNameStrings('отзыв', 'отзывы');
 
-        $this->reviewableList = config('backpack.reviews.reviewable_types_list', []);
+      $this->reviewableList = config('backpack.reviews.reviewable_types_list', []);
 
-        // CURRENT MODEL
-        $this->setEntry();
-        //dd($this->entry->owner_id);
+      // CURRENT MODEL
+      $this->setEntry();
 
-        // if($this->crud->getCurrentOperation() === 'update' && \Request::query('reviewable_type')){
-        //   $redirect_to = \Request::url();
-        //   header("Location: {$redirect_to}");
-        //   die();
-        // }
+      // if($this->crud->getCurrentOperation() === 'update' && \Request::query('reviewable_type')){
+      //   $redirect_to = \Request::url();
+      //   header("Location: {$redirect_to}");
+      //   die();
+      // }
+
+      // Trait
+      $this->setupOperation();
     }
 
     protected function setupShowOperation()
@@ -111,6 +115,9 @@ class ReviewCrudController extends CrudController
         'name' => 'text',
         'label' => 'Текст'
       ]);
+
+      // Trait
+      $this->listOperation();
     }
 
     protected function setupCreateOperation()
@@ -124,7 +131,8 @@ class ReviewCrudController extends CrudController
       $this->crud->addField([
         'name' => 'is_moderated',
         'label' => 'Опубликовано',
-        'type' => 'boolean'
+        'type' => 'boolean',
+        'default' => 1
       ]);
       
       $this->crud->addField([
@@ -228,32 +236,20 @@ class ReviewCrudController extends CrudController
         'attributes' => $attrs
       ]); 
         
-      // if(config('backpack.reviews.enable_review_type')) {
-      //   $this->crud->addField([
-      //     'name' => 'type',
-      //     'label' => 'Тип',
-      //     'type' => 'select_from_array',
-      //     'options' => [
-      //       'text' => 'Текстовый',
-      //       'video' => 'Видео'
-      //     ]
-      //   ]);
-      // }
-
-
       $this->crud->addField([
         'name'  => 'separator_2',
         'type'  => 'custom_html',
         'value' => '<hr>'
       ]);
 
-      if(config('backapck.reviews.owner_model')) {
+      if(config('backpack.reviews.owner_model')) {
         $this->crud->addField([
-          'name' => 'owner_id',
+          'name' => 'user',
           'label' => 'Автор',
           'type' => 'relationship',
-          'model' => config('backapck.reviews.owner_model'),
-          'attribute' => 'email',
+          'model' => config('backpack.reviews.owner_model'),
+          // Should be implemented in owner model
+          'attribute' => 'uniqString',
           'hint' => 'Cсылка на пользователя в системе'
         ]);
       }
@@ -269,38 +265,78 @@ class ReviewCrudController extends CrudController
         'type'  => 'custom_html',
         'value' => '<h5>Автор (статические данные)</h5>'
       ]);
+      
+      //
+      // $this->crud->addField([
+      //   'name'    => 'owner[id]',
+      //   'type'    => 'text',
+      //   'label'   => 'Id автора',
+      //   'wrapper' => ['class' => 'form-group col-md-2'],
+      //   // 'fake' => true,
+      //   // 'store_in' => 'extras'
+      // ]);
+
+      // $this->crud->addField([
+      //   'name'    => 'ownerGullname',
+      //   'type'    => 'text',
+      //   'label'   => 'Имя автора',
+      //   'wrapper' => ['class' => 'form-group col-md-5'],
+      //   // 'fake' => true,
+      //   // 'store_in' => 'extras'
+      // ]);
+
+      // $this->crud->addField([
+      //   'name'    => 'extrasOwnerEmail',
+      //   'type'    => 'text',
+      //   'label'   => 'Email автора',
+      //   'wrapper' => ['class' => 'form-group col-md-5'],
+      //   // 'fake' => true,
+      //   // 'store_in' => 'extras'
+      // ]);
+
+      // $this->crud->addField([
+      //   'name'  => 'extrasOwnerPhoto',
+      //   'type'  => 'browse',
+      //   'label' => 'Фото автора',
+      //   // 'fake' => true,
+      //   // 'store_in' => 'extras'
+      // ]);
 
       $this->crud->addField([
-          'name' => 'extrasOwnerId',
-          'label' => 'Id автора',
-          'type' => 'number',
-          'wrapper' => [ 
-            'class' => 'form-group col-md-4'
-          ]
-      ]);
-      $this->crud->addField([
-          'name' => 'extrasOwnerFullname',
-          'label' => 'Имя автора',
-          'type'  => 'text',
-          'wrapper' => [ 
-            'class' => 'form-group col-md-8'
-          ]
-      ]);
-      $this->crud->addField([
-          'name' => 'extrasOwnerEmail',
-          'label' => 'Email автора',
-          'type'  => 'email',
-          'wrapper' => [ 
-            'class' => 'form-group col-md-4'
-          ]
-      ]);
-      $this->crud->addField([
-          'name' => 'extrasOwnerPhoto',
-          'label' => 'Фото автора',
-          'type'  => 'browse',
-          'wrapper' => [ 
-            'class' => 'form-group col-md-8'
-          ]
+          'name' => 'owner',
+          'label' => 'Автор',
+          'type'  => 'repeatable',
+          'fake' => true,
+          'store_in' => 'extras',
+          'fields' => [
+            [
+                'name'    => 'id',
+                'type'    => 'text',
+                'label'   => 'Id автора',
+                'wrapper' => ['class' => 'form-group col-md-2'],
+            ],
+            [
+                'name'    => 'name',
+                'type'    => 'text',
+                'label'   => 'Имя автора',
+                'wrapper' => ['class' => 'form-group col-md-5'],
+            ],
+            [
+                'name'    => 'email',
+                'type'    => 'text',
+                'label'   => 'Email автора',
+                'wrapper' => ['class' => 'form-group col-md-5'],
+            ],
+            [
+                'name'  => 'photo',
+                'type'  => 'browse',
+                'label' => 'Фото автора',
+            ],
+        ],
+        'new_item_label'  => 'Добавить',
+        'init_rows' => 1,
+        'min_rows' => 1,
+        'max_rows' => 1,
       ]);
 
       $this->crud->addField([
@@ -344,7 +380,6 @@ class ReviewCrudController extends CrudController
         ]);
       }
 
-
       $this->crud->addField([
         'name'  => 'separator_5',
         'type'  => 'custom_html',
@@ -382,6 +417,9 @@ class ReviewCrudController extends CrudController
           'class' => 'form-group col-md-4'
         ]
       ]);
+
+      // Trait
+      $this->createOperation();
     }
 
     protected function setupUpdateOperation()
