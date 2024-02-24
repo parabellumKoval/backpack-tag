@@ -6,7 +6,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 use Backpack\Reviews\app\Http\Requests\ReviewRequest;
-use Backpack\Reviews\app\Models\Review;
+use Backpack\Reviews\app\Models\Admin\Review as AdminReview;
 
 /**
  * Class ReviewCrudController
@@ -26,7 +26,7 @@ class ReviewCrudController extends CrudController
 
     public function setup()
     {
-      $this->crud->setModel('Backpack\Reviews\app\Models\Review');
+      $this->crud->setModel(AdminReview::class);
       $this->crud->setRoute(config('backpack.base.route_prefix') . '/review');
       $this->crud->setEntityNameStrings('отзыв', 'отзывы');
 

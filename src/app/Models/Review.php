@@ -13,7 +13,7 @@ class Review extends Model
 {
     use CrudTrait;
     use HasFactory;
-
+    
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -55,6 +55,17 @@ class Review extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * __construct
+     *
+     * @param  mixed $attributes
+     * @return void
+     */
+    // public function __construct(array $attributes = array()) {
+    //   parent::__construct($attributes);
+    // }
+
     public function toArray()
     {
       return [
@@ -190,10 +201,17 @@ class Review extends Model
      * @return void
      */
     public function getPhotoAnywayAttribute() {
-      if($this->extrasOwnerPhoto)
+      if($this->user && $this->user->photo){
+        return $this->user->photo;
+      }else if($this->extrasOwnerPhoto) {
         return $this->extrasOwnerPhoto;
-      else
-        null;
+      }else {
+        return null;
+      }
+    }
+
+    public function getOwnerAttribute() {
+      return [$this->extras['owner']];
     }
 
     public function getExtrasOwnerIdAttribute() {
@@ -209,7 +227,7 @@ class Review extends Model
     }
     
     public function getExtrasOwnerPhotoAttribute() {
-      return $this->extras['owner'][0]['photo'] ?? null;
+      return $this->extras['owner']['photo'] ?? null;
     }
 
     // public function getOwnerAttribute() {

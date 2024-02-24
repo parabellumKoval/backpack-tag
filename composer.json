@@ -19,8 +19,9 @@
   ],
   "require": {
     "php": "^7.3|^8.0",
+    "backpack/crud": "4.1.*",
     "laravel/framework": "^8.75",
-    "backpack/crud": "4.1.*"
+    "parabellumkoval/request-data": "0.1.x-dev"
   },
   "require-dev": {
     "orchestra/testbench": "^6.0",
@@ -46,22 +47,26 @@
       "format": "vendor/bin/pint"
   },
   "config": {
-      "sort-packages": true,
-      "allow-plugins": {
-          "pestphp/pest-plugin": true,
-          "phpstan/extension-installer": true
-      }
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
   },
   "extra": {
-      "laravel": {
-          "providers": [
-            "Backpack\\Reviews\\ServiceProvider"
-          ],
-          "aliases": {
-            "Product": "Backpack\\Reviews\\Facades\\Reviews"
-          }
+    "laravel": {
+      "providers": [
+        "Backpack\\Reviews\\ServiceProvider"
+      ],
+      "aliases": {
+        "Reviews": "Backpack\\Reviews\\Facades\\Reviews"
       }
+    }
   },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "path",
+      "url": "/Users/andrejkoval/development/laravel-8-packages/packages/request-data"
+    }
+  ]
 }

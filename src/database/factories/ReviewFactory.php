@@ -28,20 +28,18 @@ class ReviewFactory extends Factory
         'rating' => $this->faker->numberBetween(1, config('backpack.reviews.rating_length', 5)),
         'text' => $this->faker->paragraph(2),
         'extras' => [
-          'owner' => array(
-            [
-              'id' => $this->faker->randomDigit(),
-              'name' => $this->faker->firstName(),
-              'email' => $this->faker->email(),
-              'photo' => $this->faker->randomElement([
-                'https://images.unsplash.com/photo-1600486913747-55e5470d6f40?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                'https://images.unsplash.com/photo-1585807515950-bc46d934c28b?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                'https://images.unsplash.com/photo-1559872553-c2607bb6259f?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                'https://images.unsplash.com/photo-1495716868937-273203d5bb0c?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                'https://images.unsplash.com/photo-1489985033736-3e81bb38baae?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-              ]),
-            ]
-          )
+          'owner' => [
+            'id' => $this->faker->randomDigit(),
+            'name' => $this->faker->firstName(),
+            'email' => $this->faker->email(),
+            'photo' => $this->faker->randomElement([
+              'https://images.unsplash.com/photo-1600486913747-55e5470d6f40?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              'https://images.unsplash.com/photo-1585807515950-bc46d934c28b?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              'https://images.unsplash.com/photo-1559872553-c2607bb6259f?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              'https://images.unsplash.com/photo-1495716868937-273203d5bb0c?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              'https://images.unsplash.com/photo-1489985033736-3e81bb38baae?q=80&w=1024&h=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+            ]),
+          ]
         ]
       ];
     }

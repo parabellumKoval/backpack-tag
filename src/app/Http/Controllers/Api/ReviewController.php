@@ -12,14 +12,21 @@ use Backpack\Reviews\app\Http\Resources\ReviewSmallResource;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use \Rd\app\Traits\RdTrait;
 
 class ReviewController extends \App\Http\Controllers\Controller
 {
+  use RdTrait;
 
-  private $review_model = '';
+  protected $review_model = '';
+
+  public $rd_fields = null;
 
   public function __construct() {
     $this->review_model = config('backpack.reviews.review_model', 'Backpack\Reviews\app\Models\Review');
+
+    // Rd 
+    $this->rd_fields = config('backpack.reviews.fields');
   }
 
   public function index(Request $request) {
@@ -60,87 +67,136 @@ class ReviewController extends \App\Http\Controllers\Controller
  **/
 
   public function create(Request $request) {
-    $data = $request->only(['owner', 'text', 'files', 'parent_id', 'reviewable_id', 'reviewable_type', 'rating', 'extras', 'provider']);
+    // Validate data using RdTrait validation method
+    $data = $this->validateData($request);
 
-    $validator = Validator::make($data, [
-      'text' => 'required|string|min:2|max:1000',
-      'parent_id' => 'nullable|integer',
-      'reviewable_id' => 'nullable|integer',
-      'reviewable_type' => 'nullable|string|min:2|max:255',
-      'rating' => 'nullable|integer',
-      'owner.id' => 'required_if:provider,id|integer',
-      'owner.name' => 'required_if:provider,data|string|min:2|max:100',
-      'owner.photo' => 'nullable|string',
-      'owner.email' => 'nullable|email',
-      'provider' => 'required|string|in:id,data,auth',
-      'extras' => 'nullable|array'
-    ]);
+    // Create new model
+    $review = new $this->review_model();
 
-    if ($validator->fails()) {
-      return response()->json($validator->errors(), 400);
-    }
+    $review = $this->prepareModel($review);
+
+    // Fill model with data using RdTrait
+    $review = $this->setRequestFields($review, $data);
 
     // SET EXTRAS FROM REQUEST
-    $extras = isset($data['extras'])? $data['extras']: [];
+    try {
+      [$owner_id, $owner_model] = $this->getUserData($data);
+      $review->owner_id = $owner_id;
 
+      if($owner_model) {
+        $review->extras = $this->addToExtras($review->extras, 'owner', $owner_model->toArray());
+      }
+    }catch(\Exception $e) {
+      return response()->json($e->getMessage(), $e->getCode());
+    }
+
+    // CREATE REVIEW
+    try {
+      // Save order
+      $review->save();
+    }catch(\Expression $e) {
+      return response()->json($e->getMessage(), $e->getCode());
+    }
+
+    return response()->json($review);
+  }
+     
+  /**
+   * prepareModel
+   *
+   * @param  mixed $model
+   * @return void
+   */
+  protected function prepareModel($model) {
+    if(config('backpack.reviews.is_moderated_default', false)) {
+      $model->is_moderated = true;
+    }else {
+      $model->is_moderated = false;
+    }
+
+    return $model;
+  }
+  
+  /**
+   * addToExtras
+   *
+   * @param  mixed $extras
+   * @param  mixed $key
+   * @param  mixed $data
+   * @return void
+   */
+  protected function addToExtras(array $extras, string $key, array $data) {
+    // add new data
+    $extras[$key] = $data;
+
+    return $extras;
+  } 
+
+  /**
+   * getUserData
+   *
+   * @param  mixed $data
+   * @return void
+   */
+  protected function getUserData(array $data = null) {
+    
     // INIT OWNER MODEL
-    $owner_model = null;
+    $owner = [
+      'id' => null,
+      'model' => null
+    ];
 
-    // OWNER
     // Set owner by id
     if($data['provider'] === 'id')
     {
       try{
-        $owner_model = config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile')::findOrFail($data['owner']['id']);
+        $class = config('backpack.reviews.owner_model', 'Backpack\Profile\app\Models\Profile');
+        $owner_model = $class::findOrFail((int)$data['owner']['id']);
       }catch(ModelNotFoundException $e) {
-        return response()->json($e->getMessage(), 404);
+        throw new \Exception($e->getMessage(), $e->getCode());
       }
 
-      $extras['owner'] = $owner_model;
+      $owner = [
+        'id' => $owner_model->id,
+        'model' => $owner_model
+      ];
+
     }
 
     // Set owner from auth session
     else if($data['provider'] === 'auth') 
     {
       if(!Auth::guard(config('backpack.reviews.auth_guard', 'profile'))->check()){
-        return response()->json('User not authenticated', 401);
+        throw new \Exception('User not authenticated', 404);
       }
 
       $owner_model = Auth::guard(config('backpack.reviews.auth_guard', 'profile'))->user();
-      $extras['owner'] = $owner_model; 
+
+      $owner = [
+        'id' => $owner_model->id,
+        'model' => $owner_model
+      ];
     }
 
     // Set owner by exterior data
-    else if($data['provider'] === 'data' && isset($data['owner']))
+    else if($data['provider'] === 'data')
     {
-      if(isset($data['owner']['name']))
-        $extras['owner']['name'] = $data['owner']['name'];
-      
-      if(isset($data['owner']['photo']))
-        $extras['owner']['photo'] = $data['owner']['photo'];
-
-      if(isset($data['owner']['email']))
-        $extras['owner']['email'] = $data['owner']['email']; 
+      $owner = [
+        'id' => null,
+        'model' => null
+      ];
     }
 
-    // CREATE REVIEW
-    try {
-      $review = $this->review_model::create([
-        'owner_id' => $owner_model? $owner_model->id: null,
-        'text' => isset($data['text'])? strip_tags($data['text']): '',
-        'rating' => isset($data['rating'])? $data['rating']: null,
-        'extras' => $extras,
-        'parent_id' => isset($data['parent_id'])? $data['parent_id']: 0,
-        'reviewable_id' => isset($data['reviewable_id'])? $data['reviewable_id']: null,
-        'reviewable_type' => isset($data['reviewable_type'])? $data['reviewable_type']: null,
-      ]);
-    }catch(\Expression $e) {
-      return response()->json($e->getMessage(), 400);
-    }
-
-    return response()->json($review);
+    return [$owner['id'], $owner['model']];
   }
 
+  /**
+   * likeOrDislike
+   *
+   * @param  mixed $request
+   * @param  mixed $id
+   * @return void
+   */
   public function likeOrDislike(Request $request, $id) {
     $data = $request->only(['direction', 'type']);
 
