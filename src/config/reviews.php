@@ -34,6 +34,11 @@ return [
   'review_model' => 'Backpack\Reviews\app\Models\Review',
   'review_controller_api' => 'Backpack\Reviews\app\Http\Controllers\Api\ReviewController',
 
+  // Resources
+  'resource' => [
+    'small' => 'Backpack\Reviews\app\Http\Resources\ReviewSmallResource'
+  ],
+  
   // Reviewable
   'reviewable_types_list' => [
     'Backpack\Store\app\Models\Product' => 'Товар',
