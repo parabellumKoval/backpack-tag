@@ -21,7 +21,6 @@ class ReviewSmallResource extends JsonResource
         'dislikes' => $this->dislikes? $this->dislikes: 0,
         'text' => $this->text,
         'owner' => $this->ownerModelOrInfo,
-        'children' => self::collection($this->children),
         'created_at' => $this->created_at
       ];
     }
