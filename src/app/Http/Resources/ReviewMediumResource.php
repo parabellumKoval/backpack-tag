@@ -4,7 +4,7 @@ namespace Backpack\Reviews\app\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReviewSmallResource extends JsonResource
+class ReviewMediumResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

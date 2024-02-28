@@ -4,7 +4,7 @@ namespace Backpack\Reviews\app\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReviewSmallResource extends JsonResource
+class ReviewLargeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,7 +21,9 @@ class ReviewSmallResource extends JsonResource
         'dislikes' => $this->dislikes? $this->dislikes: 0,
         'text' => $this->text,
         'owner' => $this->ownerModelOrInfo,
+        'extras' => $this->extras,
         'children' => self::collection($this->children),
+        'reviewable' => $this->shortReviewable,
         'created_at' => $this->created_at
       ];
     }

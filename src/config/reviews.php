@@ -36,7 +36,9 @@ return [
 
   // Resources
   'resource' => [
-    'small' => 'Backpack\Reviews\app\Http\Resources\ReviewSmallResource'
+    'small' => 'Backpack\Reviews\app\Http\Resources\ReviewSmallResource',
+    'medium' => 'Backpack\Reviews\app\Http\Resources\ReviewMediumResource',
+    'large' => 'Backpack\Reviews\app\Http\Resources\ReviewLargeResource'
   ],
   
   // Reviewable

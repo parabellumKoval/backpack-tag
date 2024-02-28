@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-use Backpack\Reviews\app\Http\Resources\ReviewSmallResource;
-
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use \Rd\app\Traits\RdTrait;
@@ -56,7 +54,7 @@ class ReviewController extends \App\Http\Controllers\Controller
     $per_page = request('per_page')? request('per_page'): config('backpack.reviews.per_page', 12);
     $reviews = $reviews->paginate($per_page);
 
-    return ReviewSmallResource::collection($reviews);
+    return config('backpack.reviews.resource.medium', 'Backpack\Reviews\app\Http\Resources\ReviewMediumResource')::collection($reviews);
   }
 
  /** 
