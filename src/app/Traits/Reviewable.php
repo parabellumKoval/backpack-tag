@@ -8,11 +8,11 @@ trait Reviewable {
     return $this->morphMany($model, 'reviewable');
   }
 
-  public function getTotalLickesAttribute() {
+  public function getTotalLikesAttribute() {
     return $this->reviews()->sum('likes');
   }
 
-  public function getTotalDislickesAttribute() {
+  public function getTotalDislikesAttribute() {
     return $this->reviews()->sum('dislikes');
   }
 
@@ -53,7 +53,7 @@ trait Reviewable {
    * ]
    */
   public function getReviewsRatingDetailesAttribute() {
-    $reviews = $this->reviews;
+    $reviews = $this->reviews()->moderated()->get();
 
     $rating_1 = $reviews->where('rating', 1)->count();
     $rating_2 = $reviews->where('rating', 2)->count();

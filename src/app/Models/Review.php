@@ -131,6 +131,11 @@ class Review extends Model
       return $query->where('parent_id', 0)->orWhere('parent_id', null);
     }
 
+    public function scopeModerated($query)
+    {
+      return $query->where('is_moderated', 1);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
