@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
+// EXCEPTIONS
+use Rd\app\Exceptions\DetailedException;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use \Rd\app\Traits\RdTrait;
@@ -65,8 +67,15 @@ class ReviewController extends \App\Http\Controllers\Controller
  **/
 
   public function create(Request $request) {
-    // Validate data using RdTrait validation method
-    $data = $this->validateData($request);
+    try {
+      // Validate data using RdTrait validation method
+      $data = $this->validateData($request);
+    } catch(DetailedException $e) {
+      return response()->json([
+        'message' => $e->getMessage(),
+        'options' => $e->getOptions()
+      ], $e->getCode());
+    }
 
     // Create new model
     $review = new $this->review_model();
