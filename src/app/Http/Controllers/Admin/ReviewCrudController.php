@@ -81,7 +81,7 @@ class ReviewCrudController extends CrudController
         ]);
       }
     
-      if(config('backapck.reviews.owner_model')) {
+      if(config('backpack.reviews.owner_model', null)) {
         $this->crud->addColumn([
           'name' => 'user',
           'label' => 'Автор',
@@ -242,7 +242,7 @@ class ReviewCrudController extends CrudController
         'value' => '<hr>'
       ]);
 
-      if(config('backpack.reviews.owner_model')) {
+      if(config('backpack.reviews.owner_model', null)) {
         $this->crud->addField([
           'name' => 'user',
           'label' => 'Автор',
