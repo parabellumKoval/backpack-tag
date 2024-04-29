@@ -9,25 +9,25 @@ trait Reviewable {
   }
 
   public function getTotalLikesAttribute() {
-    return $this->reviews()->sum('likes');
+    return $this->reviews()->moderated()->sum('likes');
   }
 
   public function getTotalDislikesAttribute() {
-    return $this->reviews()->sum('dislikes');
+    return $this->reviews()->moderated()->sum('dislikes');
   }
 
   public function getRatingAttribute() {
-    $rating = $this->reviews()->avg('rating');
+    $rating = $this->reviews()->moderated()->avg('rating');
     return $rating? round($rating, 1): null;
   }
   
   public function getDetailedRatingAttribute() {
-    return $this->reviews()->avg('extras.rating.avr');
+    return $this->reviews()->moderated()->avg('extras.rating.avr');
   }
 
   public function getSingleDetailedRating($key) {
     if(array_key_exists($key, config('backpack.reviews.detailed_rating_params'))) {
-      return $this->reviews()->avg('extras.rating.' . $key);
+      return $this->reviews()->moderated()->avg('extras.rating.' . $key);
     }else {
       throw new \Exception("Key $key does not exist in allowed array set (config: backpack.reviews.detailed_rating_params). ", 1);
     }
