@@ -21,6 +21,7 @@ class ReviewCrudController extends CrudController
     // use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation  { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
 
     use \App\Http\Controllers\Admin\Traits\ReviewCrud;
 
@@ -233,7 +234,8 @@ class ReviewCrudController extends CrudController
         'type' => "relationship",
         'model' => $this->getReviewableTypeModel(),
         'allows_null' => true,
-        'attributes' => $attrs
+        'attributes' => $attrs,
+        'ajax' => true
       ]); 
         
       $this->crud->addField([
@@ -462,6 +464,15 @@ class ReviewCrudController extends CrudController
         return 'Запись';
     }
 
+    // CHANGE THIS
+    protected function fetchReviewable()
+    {
+        return $this->fetch([
+          'model' => \Backpack\Store\app\Models\Product::class, // required
+          'searchable_attributes' => ['name', 'code', 'slug'],
+          'paginate' => 50
+        ]);
+    }
     // public function update($request){
     //   $requestData = \Request::all();
     //   $requestData['http_referrer'] = 'https://google.com';
