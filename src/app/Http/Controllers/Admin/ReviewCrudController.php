@@ -140,7 +140,8 @@ class ReviewCrudController extends CrudController
         'name' => 'parent',
         'label' => 'Родительский комментарий',
         'type' => 'relationship',
-        'attribute' => 'shortIdentity'
+        'attribute' => 'shortIdentity',
+        'ajax' => true
       ]);
 
       // $this->crud->addField([
@@ -470,6 +471,16 @@ class ReviewCrudController extends CrudController
         return $this->fetch([
           'model' => \Backpack\Store\app\Models\Product::class, // required
           'searchable_attributes' => ['name', 'code', 'slug'],
+          'paginate' => 50
+        ]);
+    }
+
+
+    protected function fetchParent()
+    {
+        return $this->fetch([
+          'model' => Backpack\Reviews\app\Models\Review::class, // required
+          'searchable_attributes' => ['id', 'text'],
           'paginate' => 50
         ]);
     }
