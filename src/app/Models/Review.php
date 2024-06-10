@@ -197,7 +197,7 @@ class Review extends Model
       $identity_string = "id - {$this->id}";
 
       if(!empty($this->text))
-        $identity_string .= " / " . substr($this->text, 0, 70) . '...';
+        $identity_string .= " / " . mb_substr($this->text, 0, 70) . '...';
 
       return $identity_string;
     }
