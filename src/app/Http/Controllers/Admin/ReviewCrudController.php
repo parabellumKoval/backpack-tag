@@ -234,6 +234,7 @@ class ReviewCrudController extends CrudController
         'label' => $this->getReviewableName(),
         'type' => "relationship",
         'model' => $this->getReviewableTypeModel(),
+        'data_source' => url("/admin/api/product"),
         'allows_null' => true,
         'attributes' => $attrs,
         'ajax' => true
