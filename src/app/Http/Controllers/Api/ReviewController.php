@@ -35,12 +35,12 @@ class ReviewController extends \App\Http\Controllers\Controller
    * @param  mixed $request
    * @return void
    */
-  public function index(Request $request, bool $json_response = false) {
+  public function index(Request $request) {
     
-    $reviewable_id = $request->input('reviewable_id');
+    $reviewable_id = request('reviewable_id');
 
-    if($request->input('reviewable_slug') && $request->input('reviewable_type')) {
-      $reviewable = $request->input('reviewable_type')::where('slug', $request->input('reviewable_slug'))->first();
+    if(request('reviewable_slug') && request('reviewable_type')) {
+      $reviewable = request('reviewable_type')::where('slug', request('reviewable_slug'))->first();
       $reviewable_id = $reviewable? $reviewable->id: null;
     }
 
@@ -51,15 +51,15 @@ class ReviewController extends \App\Http\Controllers\Controller
               ->when($reviewable_id, function($query) use($reviewable_id){
                 $query->where('ak_reviews.reviewable_id', $reviewable_id);
               })
-              ->when($request->input('reviewable_type'), function($query) use($request){
-                $query->where('ak_reviews.reviewable_type', $request->input('reviewable_type'));
+              ->when(request('reviewable_type'), function($query){
+                $query->where('ak_reviews.reviewable_type', request('reviewable_type'));
               })
-              ->when($request->input('is_moderated'), function($query) use($request){
-                $query->where('ak_reviews.is_moderated', $request->input('is_moderated'));
+              ->when(request('is_moderated'), function($query){
+                $query->where('ak_reviews.is_moderated', request('is_moderated'));
               })
               ->orderBy('created_at', 'desc');
 
-    $per_page = $request->input('per_page')? $request->input('per_page'): config('backpack.reviews.per_page', 12);
+    $per_page = request('per_page')? request('per_page'): config('backpack.reviews.per_page', 12);
     $reviews = $reviews->paginate($per_page);
 
     return config('backpack.reviews.resource.medium', 'Backpack\Reviews\app\Http\Resources\ReviewMediumResource')::collection($reviews);
