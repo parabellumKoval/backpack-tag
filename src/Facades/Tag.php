@@ -1,13 +1,13 @@
 <?php
 
-namespace Backpack\Reviews\Facades;
+namespace Backpack\Tag\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Review extends Facade
+class Tag extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'review';
+        return 'tag';
     }
 }

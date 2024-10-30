@@ -1,15 +1,15 @@
 <?php
 
-namespace Backpack\Reviews;
+namespace Backpack\Tag;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    const CONFIG_PATH = __DIR__ . '/config/reviews.php';
+    const CONFIG_PATH = __DIR__ . '/config/tag.php';
     
     public function boot()
     {
 
-      $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'review');
+      $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'tag');
     
 	    // Migrations
 	    $this->loadMigrationsFrom(__DIR__.'/database/migrations');
@@ -21,7 +21,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 		  // Config
 
       $this->publishes([
-        self::CONFIG_PATH => config_path('/backpack/reviews.php'),
+        self::CONFIG_PATH => config_path('/backpack/tag.php'),
       ], 'config');
       
       $this->publishes([
@@ -33,8 +33,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
       ], 'migrations');
 
       $this->publishes([
-          __DIR__.'/routes/backpack/routes.php' => resource_path('/routes/backpack/reviews/routes.php'),
-          __DIR__.'/routes/api/review.php' => resource_path('/routes/backpack/reviews/api.php'),
+          __DIR__.'/routes/backpack/routes.php' => resource_path('/routes/backpack/tag/routes.php'),
+          __DIR__.'/routes/api/review.php' => resource_path('/routes/backpack/tag/api.php'),
       ], 'routes');
     }
 
@@ -42,11 +42,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this->mergeConfigFrom(
             self::CONFIG_PATH,
-            'reviews'
+            'tag'
         );
 
         // $this->app->bind('review', function () {
-        //     return new Reviews();
+        //     return new tag();
         // });
     }
 }

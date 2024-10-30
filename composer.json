@@ -1,13 +1,13 @@
 {
-  "name": "parabellumkoval/backpack-reviews",
-  "description": "Implement Reviews API & MYSQL for backpack",
+  "name": "parabellumkoval/backpack-tag",
+  "description": "Implement Tags API & MYSQL for backpack",
   "keywords": [
     "parabellumKoval",
     "backpack",
     "laravel",
-    "review"
+    "tag"
   ],
-  "homepage": "https://github.com/parabellumkoval/backpack-reviews",
+  "homepage": "https://github.com/parabellumkoval/backpack-tag",
   "license": "MIT",
   "type": "library",
   "authors": [
@@ -29,14 +29,14 @@
   },
   "autoload": {
     "psr-4": {
-      "Backpack\\Reviews\\": "src",
-      "Backpack\\Reviews\\Database\\Factories\\": "database/factories"
+      "Backpack\\Tag\\": "src",
+      "Backpack\\Tag\\Database\\Factories\\": "database/factories"
     }
   },
   "autoload-dev": {
     "psr-4": {
       "App\\": "src/app/",
-      "Backpack\\Reviews\\Tests\\": "tests"
+      "Backpack\\Tag\\Tests\\": "tests"
     }
   },
   "scripts": {
@@ -54,10 +54,10 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Backpack\\Reviews\\ServiceProvider"
+        "Backpack\\Tag\\ServiceProvider"
       ],
       "aliases": {
-        "Reviews": "Backpack\\Reviews\\Facades\\Reviews"
+        "Tag": "Backpack\\Tag\\Facades\\Tag"
       }
     }
   },

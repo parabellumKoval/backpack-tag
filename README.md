@@ -1,19 +1,19 @@
-# Backpack-reviews
+# Backpack-tag
 
-[![Build Status](https://travis-ci.org/parabellumKoval/backpack-reviews.svg?branch=master)](https://travis-ci.org/parabellumKoval/backpack-reviews)
-[![Coverage Status](https://coveralls.io/repos/github/parabellumKoval/backpack-reviews/badge.svg?branch=master)](https://coveralls.io/github/parabellumKoval/backpack-reviews?branch=master)
+[![Build Status](https://travis-ci.org/parabellumKoval/backpack-tag.svg?branch=master)](https://travis-ci.org/parabellumKoval/backpack-tag)
+[![Coverage Status](https://coveralls.io/repos/github/parabellumKoval/backpack-tag/badge.svg?branch=master)](https://coveralls.io/github/parabellumKoval/backpack-tag?branch=master)
 
-[![Packagist](https://img.shields.io/packagist/v/parabellumKoval/backpack-reviews.svg)](https://packagist.org/packages/parabellumKoval/backpack-reviews)
-[![Packagist](https://poser.pugx.org/parabellumKoval/backpack-reviews/d/total.svg)](https://packagist.org/packages/parabellumKoval/backpack-reviews)
-[![Packagist](https://img.shields.io/packagist/l/parabellumKoval/backpack-reviews.svg)](https://packagist.org/packages/parabellumKoval/backpack-reviews)
+[![Packagist](https://img.shields.io/packagist/v/parabellumKoval/backpack-tag.svg)](https://packagist.org/packages/parabellumKoval/backpack-tag)
+[![Packagist](https://poser.pugx.org/parabellumKoval/backpack-tag/d/total.svg)](https://packagist.org/packages/parabellumKoval/backpack-tag)
+[![Packagist](https://img.shields.io/packagist/l/parabellumKoval/backpack-tag.svg)](https://packagist.org/packages/parabellumKoval/backpack-tag)
 
-This package provides a quick starter kit for implementing reviews for Laravel Backpack. Provides a database, CRUD interface, API routes and more.
+This package provides a quick starter kit for implementing tag for Laravel Backpack. Provides a database, CRUD interface, API routes and more.
 
 ## Installation
 
 Install via composer
 ```bash
-composer require parabellumKoval/backpack-reviews
+composer require parabellumKoval/backpack-tag
 ```
 
 Migrate
@@ -25,29 +25,29 @@ php artisan migrate
 
 #### Configuration File
 ```bash
-php artisan vendor:publish --provider="Backpack\Reviews\ServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Backpack\Tag\ServiceProvider" --tag="config"
 ```
 
 #### Views File
 ```bash
-php artisan vendor:publish --provider="Backpack\Reviews\ServiceProvider" --tag="views"
+php artisan vendor:publish --provider="Backpack\Tag\ServiceProvider" --tag="views"
 ```
 
 #### Migrations File
 ```bash
-php artisan vendor:publish --provider="Backpack\Reviews\ServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Backpack\Tag\ServiceProvider" --tag="migrations"
 ```
 
 #### Routes File
 ```bash
-php artisan vendor:publish --provider="Backpack\Reviews\ServiceProvider" --tag="routes"
+php artisan vendor:publish --provider="Backpack\Tag\ServiceProvider" --tag="routes"
 ```
 
 ## Usage
 
 ### Seeders
 ```bash
-php artisan db:seed --class="Backpack\Reviews\database\seeders\ReviewSeeder"
+php artisan db:seed --class="Backpack\Tag\database\seeders\tageeder"
 ```
 
 ## Security
@@ -57,5 +57,5 @@ instead of using the issue tracker.
 
 ## Credits
 
-- [](https://github.com/parabellumKoval/backpack-reviews)
-- [All contributors](https://github.com/parabellumKoval/backpack-reviews/graphs/contributors)
+- [](https://github.com/parabellumKoval/backpack-tag)
+- [All contributors](https://github.com/parabellumKoval/backpack-tag/graphs/contributors)

@@ -1,11 +1,11 @@
 <?php
 
-namespace Backpack\Reviews\app\Http\Requests;
+namespace Backpack\Tag\app\Http\Requests;
 
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReviewRequest extends FormRequest
+class TagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,16 +24,9 @@ class ReviewRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
-        $type = $this->type;
-        
-        $this->redirect = url()->previous().'#review_' . $type;
-      
+    { 
         return [
           'text' => 'required',
-            // $type . '_review_name' => 'required',
-            // $type . '_review_text' => 'required',
-            // $type . '_review_isAgree' => 'required',
         ];
     }
 
@@ -45,7 +38,6 @@ class ReviewRequest extends FormRequest
     public function attributes()
     {
         return [
-            'text_review_text' => 'review text'
         ];
     }
 
@@ -57,7 +49,6 @@ class ReviewRequest extends FormRequest
     public function messages()
     {
         return [
-            //
         ];
     }
 }
