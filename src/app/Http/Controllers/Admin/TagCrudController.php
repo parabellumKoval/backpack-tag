@@ -55,8 +55,11 @@ class TagCrudController extends CrudController
       ]);
 
       $this->crud->addColumn([
-        'name' => 'color',
+        'name' => 'colorAdmin',
         'label' => 'Цвет',
+        'escaped' => false,
+        'limit' => 2500,
+        'searchLogic' => true,
       ]);
 
     }

@@ -27,6 +27,7 @@ class TagRequest extends FormRequest
     { 
         return [
           'text' => 'required',
+          'color' => 'required',
         ];
     }
 

@@ -89,7 +89,12 @@ class Tag extends Model
     |--------------------------------------------------------------------------
     | ACCESSORS
     |--------------------------------------------------------------------------
-    */   
+    */
+
+    public function getColorAdminAttribute() {
+      $html = '<div style="background: ' . $this->color . '; width: 25px; height:25px; border-radius: 100%;"></div>';
+      return $html;
+    }
     
     /*
     |--------------------------------------------------------------------------
