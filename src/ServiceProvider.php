@@ -16,7 +16,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 	    
 	    // Routes
     	$this->loadRoutesFrom(__DIR__.'/routes/backpack/routes.php');
-    	$this->loadRoutesFrom(__DIR__.'/routes/api/review.php');
     
 		  // Config
 
@@ -33,8 +32,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
       ], 'migrations');
 
       $this->publishes([
-          __DIR__.'/routes/backpack/routes.php' => resource_path('/routes/backpack/tag/routes.php'),
-          __DIR__.'/routes/api/review.php' => resource_path('/routes/backpack/tag/api.php'),
+          __DIR__.'/routes/backpack/routes.php' => resource_path('/routes/backpack/tag/routes.php')
       ], 'routes');
     }
 

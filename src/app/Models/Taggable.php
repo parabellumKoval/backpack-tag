@@ -5,16 +5,11 @@ namespace Backpack\Tag\app\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-// FACTORY
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Backpack\Reviews\database\factories\ReviewFactory;
-
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Tag extends Model
+class Taggable extends Model
 {
     use CrudTrait;
-    use HasFactory;
     
     /*
     |--------------------------------------------------------------------------
@@ -22,24 +17,22 @@ class Tag extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'ak_tags';
+    protected $table = 'ak_taggables';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
     protected $fillable = [
-      'text',
-      'color',
-      'extras'
+      'tag_id',
+      'taggable_id',
+      'taggable_type'
     ];
     // protected $hidden = [];
     // protected $dates = [];
 	
     // !!!!
-	  // protected $with = ['owner'];
+	  // protected $with = [''];
 
-    protected $casts = [
-      'extras' => 'array',
-    ];
+    // protected $casts = [];
 	
     /*
     |--------------------------------------------------------------------------
@@ -57,27 +50,16 @@ class Tag extends Model
     //   parent::__construct($attributes);
     // }
 
-    public function toArray()
-    {
-      return [
-        "id" => $this->id,
-        "text" => $this->text,
-        "color" => $this->color,
-        "extras" => $this->extras,
-        "created_at" => $this->created_at
-      ];
-    }
+    // public function toArray()
+    // {
+    //   return [];
+    // }
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    
-    public function tagables()
-    {
-      return $this->morphTo();
-    }
 
     /*
     |--------------------------------------------------------------------------

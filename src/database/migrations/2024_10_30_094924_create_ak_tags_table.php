@@ -16,7 +16,7 @@ class CreateAkTagsTable extends Migration
         Schema::create('ak_tags', function (Blueprint $table) {
             $table->id();
             $table->text('text');
-            $table->text('color')->nullable();
+            $table->string('color')->nullable();
             $table->json('extras')->nullable();
             $table->timestamps();
         });

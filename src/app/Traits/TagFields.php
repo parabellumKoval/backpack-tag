@@ -16,7 +16,19 @@ trait TagFields {
     $this->crud->addField([
       'name' => 'tags',
       'type' => 'relationship',
-      'label' => "Tags",
+      'label' => "Теги",
+    ]);
+  }
+
+
+  protected function setupTagColumns() {
+
+    $this->crud->addColumn([
+      'name' => 'tags',
+      'type' => 'tag',
+      'data-type' => 'Backpack\Store\app\Models\Admin\Product',
+      'label' => "Теги",
+      'priority' => 1
     ]);
   }
 }
