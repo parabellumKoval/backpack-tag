@@ -34,6 +34,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
       $this->publishes([
           __DIR__.'/routes/backpack/routes.php' => resource_path('/routes/backpack/tag/routes.php')
       ], 'routes');
+
+
+      $this->publishes([
+          __DIR__.'/public' => public_path('ak_tags'),
+      ], 'public');
     }
 
     public function register()
@@ -42,9 +47,5 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             self::CONFIG_PATH,
             'tag'
         );
-
-        // $this->app->bind('review', function () {
-        //     return new tag();
-        // });
     }
 }
