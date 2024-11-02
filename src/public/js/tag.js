@@ -27,9 +27,11 @@ jQuery(function($){
     const setRemoveButtonListener = function(button) {
       button.addEventListener('click', function(item) {
           var element = $(item.target)
-          var tagElement = element.parent('.ak-tag')
+          var tagElement = element.parent()[0]
+          var tagsWrapper = element.closest('[data-target="ak-tags"]')
 
-          var $inlineRemoveRoute = 'http://localhost:8888/admin/tag/inline/remove';
+          var $inlineRemoveRoute = tagsWrapper.attr('data-inline-remove-route');
+          
           var $dataId = element.attr('data-id')
 
           var $formData = {
@@ -41,7 +43,6 @@ jQuery(function($){
             data: $formData,
             type: 'POST',
             success: function (result) {
-              // console.log(result)
               tagElement.remove()
             }
           })
@@ -69,8 +70,6 @@ jQuery(function($){
       var $form = element.closest('form');
 
       $inlineCreateButtonElement.on('click', function (event) {
-
-        console.log('event', event, event.target)
 
             //we change button state so users know something is happening.
             // var loadingText = '<span class="la la-spinner la-spin" style="font-size:18px;"></span>';
@@ -139,29 +138,28 @@ jQuery(function($){
 
     }
 
-    function ajaxAttachTag(element, data) {
-      var $inlineCreateRoute = 'http://localhost:8888/admin/tag/inline/create/attach';
-      var $dataId = element.attr('data-id')
-      var $dataType = element.attr('data-type')
+    // function ajaxAttachTag(element, data) {
+    //   var $inlineCreateRoute = 'http://localhost:8888/admin/tag/inline/create/attach';
+    //   var $dataId = element.attr('data-id')
+    //   var $dataType = element.attr('data-type')
 
-      var $formData = {
-        tag_id: data.id,
-        taggable_id: $dataId,
-        taggable_type: $dataType,
-      }
+    //   var $formData = {
+    //     tag_id: data.id,
+    //     taggable_id: $dataId,
+    //     taggable_type: $dataType,
+    //   }
 
-      $.ajax({
-        url: $inlineCreateRoute,
-        data: $formData,
-        type: 'POST',
-        success: function (result) {
-          console.log(result)
-        }
-      })
-    }
+    //   $.ajax({
+    //     url: $inlineCreateRoute,
+    //     data: $formData,
+    //     type: 'POST',
+    //     success: function (result) {
+    //       console.log(result)
+    //     }
+    //   })
+    // }
 
     function addTagToStack(element, data) {
-      // console.log('addTagToStack', data)
       // $(element).insertBefore()
       var removeBtnHtml = '<button class="ak-tag-remove-btn" data-id="' + data.taggable.id + '" data-target="remove-tag-btn">X</button>';
       $('<span class="ak-tag" style="background: ' + data.tag.color + ';">' + data.tag.text + removeBtnHtml +'</span>')
