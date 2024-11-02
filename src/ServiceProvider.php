@@ -37,7 +37,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
       $this->publishes([
-          __DIR__.'/public' => public_path('ak_tags'),
+          __DIR__.'/public' => public_path('packages/backpack/tag'),
       ], 'public');
     }
 
