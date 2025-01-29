@@ -14,11 +14,17 @@ trait TagFields {
       'type' => 'select2',
     ], function(){
       $tags = Tag::all()->pluck('text', 'id')->toArray();
+      $tags['no'] = 'Без тега';
+
       return $tags;
     }, function($id){
-      $this->crud->query->whereHas('tags', function ($query) use ($id) {
-        $query->where('tag_id', $id);
-      });
+      if($id === 'no') {
+        $this->crud->query->has('tags', '=', 0);
+      }else {
+        $this->crud->query->whereHas('tags', function ($query) use ($id) {
+          $query->where('tag_id', $id);
+        });
+      }
     });
   }
 
