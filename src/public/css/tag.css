@@ -1,0 +1,54 @@
+.ak-tag-wrapper {
+  white-space: wrap;
+}
+
+.ak-tag {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 12px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.65);
+  opacity: 0.9;
+  white-space: nowrap;
+  border-radius: 2px;
+  padding: 2px 0 2px 6px;
+  margin: 2px;
+}
+
+.ak-tag-remove-btn {
+  position: relative;
+  display: inline-block;
+  margin: -2px 0 -2px 4px;
+  height: 20px;
+  width: 20px;
+  padding: 1px 4px;
+  background: none;
+  border: none;
+  outline: none;
+  font-weight: 900;
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
+  border-radius: 0 3px 3px 0;
+  background: rgba(0,0,0,0.2);
+}
+
+.ak-tag-remove-btn:hover {
+  color: #fff;
+  background: rgba(0,0,0,0.1);
+}
+
+.ak-tag-add-btn {
+  height: 20px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  line-height: 12px;
+  border: 0;
+  background: #eee;
+  white-space: nowrap;
+}
+
+
+.ak-tag-add-btn:hover {
+  background: #f5f5f5;
+}
